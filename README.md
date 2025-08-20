@@ -1,4 +1,7 @@
-# PROJETO_CSM
+<p align="center">
+  <img src="images/logomodulo.png" alt="Logo Faculdade" width="150"/>
+</p>
+
 
 # 📝 Notepad Star Wars  
 
