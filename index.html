@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Tarefas</title>
     <link rel="stylesheet" href="styles/style.css">
+    <script src="https://kit.fontawesome.com/3bc329aa88.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <section class="all-list">
-        <form action="#" id="form-add">
+        <article class="hero">
             <h1>Lista de Tarefas</h1>
-            <input type="text" name="input-titulo" id="input-titulo" placeholder="Digite o título...">
-            <button type="submit" id="add-item">Adicionar</button>
+            <i class="add-item fa-solid fa-plus"></i>
+        </article>
+        <form action="#" id="form-item" class="edit-container">
+            <input type="text" name="editarTitulo" id="editarTitulo" placeholder="Título..." maxlength="60">
+            <textarea name="descricao-tarefa" id="descricaoTarefa" placeholder="Descrição..."></textarea>
+            <div class="edit-btns">
+                <button class="salvar-btn" data-function='salvar-btn'>Salvar</button>
+                <button class="cancelar-btn" data-function='cancelar-btn'>Cancelar</button>
+            </div>
         </form>
-        <ul class="listaDeTarefas">
-            <li class="item-lista">
-                <p class="item-p">Item 1</p>
-                <button class="excluir-btn">x</button>
-            </li>
-        </ul>
+        <ul class="listaDeTarefas"></ul>
     </section>
     <script src="scripts/script.js"></script>
 </body>

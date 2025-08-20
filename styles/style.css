@@ -3,6 +3,7 @@
     margin: 0;
     box-sizing: border-box;
 }
+
 html body{
     display: flex;
     justify-content: center;
@@ -10,22 +11,28 @@ html body{
     width: 100vw;
     height: 100dvh;
 }
+
 .all-list{
     display: flex;
+    position: relative;
     flex-direction: column;
-    width: 500px;
-    max-height: 500px;
-    min-height: 300px;
+    width: 600px;
+    max-height: 600px;
+    min-height: 400px;
     height: auto;
     border: 1px solid rgb(155, 153, 153);
     border-radius: 10px;
     box-shadow: 7px 10px 10px rgba(0, 0, 0, 0.15);
 }
 
-#form-add{
+.hero{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 20px 5%;
-    border: 1px solid blue;
 }
+
+.hero i{ cursor: pointer; } 
 
 .listaDeTarefas{ 
     width: 100%;
@@ -42,4 +49,106 @@ html body{
     background-color: rgb(186, 193, 212);
     padding: 15px 10px;
     border-radius: 5px;
+    box-shadow: 7px 10px 6px rgba(0, 0, 0, 0.15);
+}
+
+.item-lista button,
+.item-lista i,
+.item-lista p{ 
+    cursor: pointer;
+    margin: 5px;
+}
+
+.item-lista p{
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-lista i { font-size: 18px; }
+.item-lista .check-btn i { font-size: inherit; }
+
+.check-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid blue;
+    background-color: transparent;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.check-btn-i.displayNone{ display: none; }
+
+.edit-container{
+    display: none;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    background-color: gray;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.edit-container input,
+.edit-container textarea{
+    outline: none;
+    border: none;
+    width: 100%;
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+.edit-container input{
+    align-items: center;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.alerta#editarTitulo{
+    outline: 2px solid rgb(218, 0, 0);
+    animation: moverTitulo .3s ease-in-out 1;
+}
+
+.alerta#editarTitulo::placeholder{
+    color: rgb(218, 0, 0);
+    font-weight: bold;
+}
+
+@keyframes moverTitulo {
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.edit-container textarea{
+    resize: none;
+    font-size: 15px;
+    height: 100%;
+    padding-left: 10px;
+    padding-top: 5px;
+    overflow-y: auto;
+}
+
+.edit-container button{
+    font-size: 15px;
+    margin: 5px;
+    margin-right: 0;
+    padding: 5px 10px;
+}
+
+.edit-btns{
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }
