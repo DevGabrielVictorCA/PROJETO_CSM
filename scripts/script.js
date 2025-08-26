@@ -9,7 +9,6 @@
     const areaDescricao = document.getElementById('descricaoTarefa');
     const formItem = document.getElementById('form-item');
     const listaTarefas = document.querySelector('.listaDeTarefas');
-    const mensagemErro = document.querySelector('.mensagem-erro');
 
     let indexEditando = null;
     let arrTarefas = [];
