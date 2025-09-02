@@ -1,3 +1,72 @@
+<<<<<<< HEAD
+;(function () {
+    "use strict";
+
+    // Seletores
+    const addItem = document.querySelector('.add-item');
+    const cancelarBtn = document.querySelector('.cancelar-btn');
+    const salvarBtn = document.querySelector('.salvar-btn');
+    const inputTitulo = document.getElementById('editarTitulo');
+    const areaDescricao = document.getElementById('descricaoTarefa');
+    const formItem = document.getElementById('form-item');
+    const listaTarefas = document.querySelector('.listaDeTarefas');
+
+    let indexEditando = null;
+    let arrTarefas = [];
+
+    // Eventos
+    addItem.addEventListener('click', () => { abrirFormulario(); });
+
+    salvarBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if(!inputTitulo.value.trim()){ 
+            inputTitulo.classList.remove('alerta');
+            void inputTitulo.offsetWidth;
+            inputTitulo.classList.add('alerta'); 
+
+            inputTitulo.placeholder = "Por favor, preencha o Título!";
+            inputTitulo.focus()
+
+            return;
+        } else if (indexEditando !== null) { salvarItemEditado();
+        } else { addNovaTarefa(inputTitulo.value, areaDescricao.value); }
+
+        fecharFormulario();
+    });
+
+    inputTitulo.addEventListener('input', () => { 
+        inputTitulo.classList.remove('alerta'); 
+        inputTitulo.placeholder = "Título...";
+    })
+
+    cancelarBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        inputTitulo.classList.remove('alerta');
+        inputTitulo.placeholder = "Título...";
+
+        fecharFormulario();
+    });
+
+    listaTarefas.addEventListener('click', (e) => {
+        const itemAtual = e.target.closest('li');
+        if (!itemAtual) return;
+
+        const index = parseInt(itemAtual.dataset.index, 10);
+        const funcao = e.target.getAttribute('data-function');
+
+        switch (funcao) {
+            case 'check-btn':
+                alternarCheck(index, itemAtual);
+                break;
+            case 'excluir-btn':
+                removerItem(index);
+                break;
+            case 'edit-btn':
+                editarItem(index);
+                break;
+=======
 // Criar estrelas para o fundo da galáxia
         function createStars() {
             const heroSection = document.getElementById('hero');
@@ -22,6 +91,7 @@
                 
                 heroSection.appendChild(star);
             }
+>>>>>>> upstream/main
         }
         
         // Funções para o modal de login/registro
