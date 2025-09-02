@@ -71,6 +71,11 @@ header{
     width: 100%;
 }
 
+header div{
+    position: relative;
+    z-index: 20;
+}
+
 .perfil-usuario{
     width: 40px;
     height: 40px;
@@ -95,6 +100,7 @@ header{
     border: 2px solid var(--secondary-color);
     cursor: pointer;
     transition: all var(--first-time) ease-in-out;
+    background-color: var(--primary-color);
 }
 
 #tema-btn{ 
@@ -181,6 +187,11 @@ header{
     cursor: pointer; 
     transition: all var(--first-time) linear;
 } 
+
+.all-list .hero i{
+    position: absolute;
+    z-index: 30;
+}
 
 .hero i:hover{ 
     transform: translateY(-3px);
@@ -337,7 +348,7 @@ header{
     background-color: var(--primary-color);
     border: 2px solid var(--secondary-color);
     width: 600px;
-    height: 85%;
+    height: 90%;
     z-index: 10;
     top: 50%;
     left: 50%;
@@ -345,6 +356,7 @@ header{
     padding: 10px 20px;
     font-size: 20px;
     border-radius: 10px;
+    transition: all var(--first-time) ease-in-out;
 }
 
 .edit-container input,
@@ -478,4 +490,44 @@ input:-webkit-autofill:active {
         width: 100vw;
         margin-top: 5%;
     }
+}
+
+@media (max-width: 850px) and (orientation: landscape) {
+     header { padding: 20px 7%; }
+    
+    .all-list, 
+    .edit-container{
+        min-height: 100vh;
+        min-height: 0;
+        height: 100vh;
+    }
+
+    .logo svg{
+        width: 150px;
+        height: 150px;
+    }
+
+    .logo h1{ font-size: 11px; }
+
+    .hero i{ 
+        top: 30px;
+        right: 100px;
+    }
+
+    .indicador-tarefas img{
+        width: 50px;
+        height: 50px;
+    }
+
+    .indicador-tarefas h2{ font-size: 20px; }
+    .indicador-tarefas p{ font-size: 12px; }
+
+    .edit-container input{ font-size: 13px; }
+    .edit-container textarea{ font-size: 12px; }
+
+    .edit-btns button{
+        font-size: 13px;
+        height: 10px;
+    }
+   
 }
