@@ -9,66 +9,66 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body class="min-h-screen">
-    <!-- Hero Section com fundo estrelado -->
-    <section class="galaxy-bg min-h-[60vh] flex flex-col items-center justify-center relative" id="hero">
-        <!-- As estrelas serão geradas via JavaScript -->
-        
-        <div class="text-center z-10 px-4 max-w-4xl">
-            <h1 class="star-wars-font text-5xl md:text-7xl font-bold mb-6 depth-effect">STAR WARS TO-DO LIST</h1>
-            <p class="text-xl md:text-2xl mb-8 depth-effect">Que a força esteja com suas tarefas diárias</p>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
-                <button onclick="openModal('login')" class="lightsaber-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                    </svg>
-                    Acessar a Força
-                </button>
-                
-                <button onclick="openModal('register')" class="lightsaber-btn bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    Juntar-se à Rebelião
-                </button>
-            </div>
-        </div>
-        
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-        </div>
-    </section>
+<!-- Hero Section com fundo estrelado -->
+<section class="galaxy-bg min-h-[60vh] flex flex-col items-center justify-center relative" id="hero">
+    <!-- As estrelas serão geradas via JavaScript -->
 
-    <!-- Sobre Section -->
-    <section id="about" class="py-20 px-4 md:px-10 scroll-effect">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">SOBRE O PROJETO</h2>
-            
-            <div class="bg-gray-900 bg-opacity-70 rounded-xl p-8 border border-yellow-500 shadow-lg">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h3 class="text-2xl font-bold mb-4 depth-effect">Uma Nova Esperança para Sua Produtividade</h3>
-                        <p class="text-gray-300 mb-4">O Star Wars To-Do List nasceu da união de fãs da saga com desenvolvedores que acreditam que a força pode ser usada para melhorar sua organização e produtividade no dia a dia.</p>
-                        <p class="text-gray-300 mb-4">Nossa missão é trazer a experiência épica de Star Wars para o gerenciamento de tarefas, transformando suas listas maçantes em missões emocionantes pela galáxia.</p>
-                        <p class="text-gray-300">Como Yoda dizia: "Faça ou não faça. Tentativa não há." Com nosso app, você certamente fará!</p>
-                    </div>
-                    <div class="flex justify-center">
-                        <div class="relative w-64 h-64">
-                            <div class="absolute inset-0 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
-                            <div class="rounded-full w-64 h-64 bg-gray-800 relative z-10 flex items-center justify-center">
+    <div class="text-center z-10 px-4 max-w-4xl">
+        <h1 class="star-wars-font text-5xl md:text-7xl font-bold mb-6 depth-effect">STAR WARS TO-DO LIST</h1>
+        <p class="text-xl md:text-2xl mb-8 depth-effect">Que a força esteja com suas tarefas diárias</p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+            <button onclick="openModal('login')" class="lightsaber-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                Acessar a Força
+            </button>
+
+            <button onclick="openModal('register')" class="lightsaber-btn bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Juntar-se à Rebelião
+            </button>
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+    </div>
+</section>
+
+<!-- Sobre Section -->
+<section id="about" class="py-20 px-4 md:px-10 scroll-effect">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">SOBRE O PROJETO</h2>
+
+        <div class="bg-gray-900 bg-opacity-70 rounded-xl p-8 border border-yellow-500 shadow-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 depth-effect">Uma Nova Esperança para Sua Produtividade</h3>
+                    <p class="text-gray-300 mb-4">O Star Wars To-Do List nasceu da união de fãs da saga com desenvolvedores que acreditam que a força pode ser usada para melhorar sua organização e produtividade no dia a dia.</p>
+                    <p class="text-gray-300 mb-4">Nossa missão é trazer a experiência épica de Star Wars para o gerenciamento de tarefas, transformando suas listas maçantes em missões emocionantes pela galáxia.</p>
+                    <p class="text-gray-300">Como Yoda dizia: "Faça ou não faça. Tentativa não há." Com nosso app, você certamente fará!</p>
+                </div>
+                <div class="flex justify-center">
+                    <div class="relative w-64 h-64">
+                        <div class="absolute inset-0 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
+                        <div class="rounded-full w-64 h-64 bg-gray-800 relative z-10 flex items-center justify-center">
                             <img src="images/about-img.png" alt="">
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Curiosidades Section -->
-    <section id="facts" class="py-20 px-4 md:px-10 bg-black bg-opacity-30">
+<!-- Curiosidades Section -->
+ <section id="facts" class="py-20 px-4 md:px-10 bg-black bg-opacity-30">
         <div class="max-w-6xl mx-auto">
             <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">CURIOSIDADES</h2>
             
@@ -112,8 +112,8 @@
         </div>
     </section>
 
-    <!-- Contato Section -->
-    <section id="contact" class="py-20 px-4 md:px-10 scroll-effect">
+<!-- Contato Section -->
+ <section id="contact" class="py-20 px-4 md:px-10 scroll-effect">
         <div class="max-w-6xl mx-auto">
             <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">CONTATO DOS CRIADORES</h2>
             
@@ -247,72 +247,131 @@
             </div>
         </div>
     </section>
-    
-    <!-- Modal de Login/Registro -->
-    <div id="loginModal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-900 bg-opacity-95 border-2 border-yellow-500 rounded-xl w-full max-w-md p-6 relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-yellow-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+
+<!-- Modal de Login/Registro -->
+<div id="loginModal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 hidden">
+    <div class="bg-gray-900 bg-opacity-95 border-2 border-yellow-500 rounded-xl w-full max-w-md p-6 relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-yellow-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div id="loginForm">
+            <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Acesse a Força</h2>
             
-            <div id="loginForm">
-                <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Acesse a Força</h2>
-                
+            <div id="loginMessage" class="mb-4 text-red-500 text-center hidden"></div>
+
+            <form id="loginFormElement" onsubmit="handleLogin(event)">
                 <div class="mb-4">
                     <label for="email" class="block text-gray-300 mb-2">Seu Email Jedi</label>
-                    <input type="email" id="email" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <input type="email" id="email" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
-                
+
                 <div class="mb-6">
                     <label for="password" class="block text-gray-300 mb-2">Senha Secreta</label>
-                    <input type="password" id="password" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <input type="password" id="password" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
-                
-                <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
+
+                <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
                     Acessar o Império
                 </button>
-                
-                <p class="text-center text-gray-400 mt-6">
-                    Não tem uma conta? 
-                    <a href="#" onclick="showRegisterForm()" class="text-yellow-500 hover:underline">Junte-se à Rebelião</a>
-                </p>
-            </div>
+            </form>
+
+            <p class="text-center text-gray-400 mt-6">
+                Não tem uma conta?
+                <a href="#" onclick="showRegisterForm()" class="text-yellow-500 hover:underline">Junte-se à Rebelião</a>
+            </p>
             
-            <div id="registerForm" class="hidden">
-                <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Junte-se à Rebelião</h2>
-                
+            <p class="text-center text-gray-400 mt-4">
+                <a href="#" onclick="showRecoveryForm()" class="text-yellow-500 hover:underline">Esqueceu sua senha?</a>
+            </p>
+        </div>
+
+        <div id="registerForm" class="hidden">
+            <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Junte-se à Rebelião</h2>
+
+            <div id="registerMessage" class="mb-4 text-red-500 text-center hidden"></div>
+
+            <form id="registerFormElement" onsubmit="handleRegister(event)">
                 <div class="mb-4">
                     <label for="name" class="block text-gray-300 mb-2">Seu Nome Jedi</label>
-                    <input type="text" id="name" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <input type="text" id="name" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="newEmail" class="block text-gray-300 mb-2">Email da Força</label>
-                    <input type="email" id="newEmail" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <input type="email" id="newEmail" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
-                
+
                 <div class="mb-6">
                     <label for="newPassword" class="block text-gray-300 mb-2">Crie uma Senha Jedi</label>
-                    <input type="password" id="newPassword" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <input type="password" id="newPassword" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
-                
-                <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
+
+                <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
                     Completar Inscrição
                 </button>
-                
-                <p class="text-center text-gray-400 mt-6">
-                    Já tem uma conta? 
-                    <a href="#" onclick="showLoginForm()" class="text-yellow-500 hover:underline">Acesse a Força</a>
-                </p>
+            </form>
+
+            <p class="text-center text-gray-400 mt-6">
+                Já tem uma conta?
+                <a href="#" onclick="showLoginForm()" class="text-yellow-500 hover:underline">Acesse a Força</a>
+            </p>
+        </div>
+
+        <div id="recoveryForm" class="hidden">
+            <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Recuperar Senha</h2>
+
+            <div id="recoveryMessage" class="mb-4 text-center"></div>
+
+            <div id="step1">
+                <p class="text-gray-300 mb-4">Informe seu email para iniciar a recuperação de senha:</p>
+                <div class="mb-4">
+                    <label for="recoveryEmail" class="block text-gray-300 mb-2">Email Jedi</label>
+                    <input type="email" id="recoveryEmail" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+                </div>
+                <button onclick="startRecovery()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300 mb-4">
+                    Enviar Código
+                </button>
             </div>
+
+            <div id="step2" class="hidden">
+                <p class="text-gray-300 mb-4">Enviamos um código para seu email. Informe-o abaixo:</p>
+                <div class="mb-4">
+                    <label for="recoveryCode" class="block text-gray-300 mb-2">Código de Verificação</label>
+                    <input type="text" id="recoveryCode" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="newPasswordRecovery" class="block text-gray-300 mb-2">Nova Senha</label>
+                    <input type="password" id="newPasswordRecovery" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+                </div>
+                <button onclick="verifyRecoveryCode()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
+                    Redefinir Senha
+                </button>
+            </div>
+
+            <p class="text-center text-gray-400 mt-6">
+                <a href="#" onclick="showLoginForm()" class="text-yellow-500 hover:underline">Voltar ao Login</a>
+            </p>
         </div>
     </div>
-    
-    <footer class="py-8 text-center border-t border-yellow-900">
-        <p class="text-gray-500">Que a força esteja com você • 2025 Star Wars To-Do List</p>
-    </footer>
-    <script src="scripts/script.js"></script>
+</div>
+
+<!-- Welcome Screen (inicialmente oculta) -->
+<div id="welcomeScreen" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden">
+    <div class="text-center px-4 max-w-4xl">
+        <h1 class="star-wars-font text-4xl md:text-6xl text-yellow-500 mb-8">BEM-VINDO, JEDI!</h1>
+        <p class="text-xl md:text-2xl text-white mb-10">Que a força esteja com suas tarefas diárias</p>
+        <button onclick="hideWelcomeScreen()" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition duration-300 text-lg">
+            Iniciar Missão
+        </button>
+    </div>
+</div>
+
+<footer class="py-8 text-center border-t border-yellow-900">
+    <p class="text-gray-500">Que a força esteja com você • 2025 Star Wars To-Do List</p>
+</footer>
+<script src="scripts/script.js"></script>
 </body>
 </html>
