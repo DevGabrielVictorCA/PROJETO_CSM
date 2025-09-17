@@ -1,94 +1,27 @@
-body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #0a0a1a;
-            color: #ffe81f;
-            overflow-x: hidden;
-        }
-        .star-wars-font {
-            font-family: 'Orbitron', sans-serif;
-        }
-        .galaxy-bg {
-            background: linear-gradient(to bottom, #000000, #0a0a1a);
-            position: relative;
-            overflow: hidden;
-        }
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle linear infinite;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-        .depth-effect {
-            transition: all 0.3s ease;
-            transform: translateZ(0);
-        }
-        .depth-effect:hover {
-            transform: translateZ(20px) translateY(-5px);
-            text-shadow: 0 0 10px rgba(255, 232, 31, 0.7);
-        }
-        .scroll-effect {
-            mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-        }
-        .section-title {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 2rem;
-        }
-        .section-title:after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: #ffe81f;
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.5s ease;
-        }
-        .section-title:hover:after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-        .creator-card {
-            transition: all 0.3s ease;
-            transform: translateZ(0);
-        }
-        .creator-card:hover {
-            transform: translateZ(30px) translateY(-10px);
-            box-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
-        }
-        .lightsaber-btn {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        .lightsaber-btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: all 0.5s ease;
-        }
-        .lightsaber-btn:hover:before {
-            left: 100%;
-        }
-        .modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: scale(0.9);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .modal.active {
-            transform: scale(1);
-            opacity: 1;
-            pointer-events: all;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --primary-color: #e6e6c5;
+    --secondary-color: #442007;
+    --highlighted-color: #03bfcc;
+    --matte-color: #A97247;
+    --first-time: .3s;
+    --transicao-tema: all 2s ease-in-out;
+
+}
+
+body{
+    background-color: #000;
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+}
+
+h1{
+    text-align: center;
+}
