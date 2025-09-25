@@ -77,6 +77,9 @@ header div{
 }
 
 .perfil-usuario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 40px;
     height: 40px;
     background-color: var(--secondary-color);
@@ -87,6 +90,10 @@ header div{
     cursor: pointer;
 }
 
+.perfil-usuario i{
+    color: var(--primary-color);
+    transform: rotate(180deg);
+}
 .perfil-usuario:hover{
     background-color: var(--highlighted-color);
     outline: 2px solid var(--highlighted-color);

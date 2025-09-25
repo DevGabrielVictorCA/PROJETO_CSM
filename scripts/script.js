@@ -14,16 +14,11 @@
             const star = document.createElement('div');
             star.classList.add('star');
 
-            // Tamanho aleatório para as estrelas
             const size = Math.random() * 3;
             star.style.width = `${size}px`;
             star.style.height = `${size}px`;
-
-            // Posição aleatória
             star.style.left = `${Math.random() * 100}%`;
             star.style.top = `${Math.random() * 100}%`;
-
-            // Duração da animação aleatória
             star.style.animationDuration = `${2 + Math.random() * 5}s`;
             star.style.animationDelay = `${Math.random() * 5}s`;
 
@@ -81,7 +76,7 @@
         }
     });
 
-    // Funções de autenticação
+    // Funções de autenticação com Firebase (versão simplificada)
     function handleLogin(event) {
         event.preventDefault();
         
@@ -89,20 +84,50 @@
         const password = document.getElementById('password').value;
         const messageElement = document.getElementById('loginMessage');
         
-        // Simulação de verificação no banco de dados
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
+        messageElement.textContent = 'Conectando à Força...';
+        messageElement.classList.remove('hidden', 'text-red-500');
+        messageElement.classList.add('text-yellow-500');
         
-        if (user) {
-            // Login bem-sucedido
-            closeModal();
-            showWelcomeScreen(user.name);
-        } else {
-            // Login falhou
-            messageElement.textContent = 'Email ou senha incorretos!';
-            messageElement.classList.remove('hidden');
-            messageElement.classList.add('text-red-500');
-        }
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Login bem-sucedido
+                messageElement.textContent = 'Conexão com a Força estabelecida!';
+                messageElement.classList.remove('text-yellow-500');
+                messageElement.classList.add('text-green-500');
+                
+                setTimeout(() => {
+                    closeModal();
+                    window.location.href = 'lista.html';
+                }, 1000);
+            })
+            .catch((error) => {
+                // Tratar erros
+                let errorMessage = 'Erro ao conectar com a Força!';
+                
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email Jedi inválido!';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'Este usuário Jedi foi desativado!';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'Jedi não encontrado nos registros!';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Senha secreta incorreta!';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'Muitas tentativas. Tente novamente mais tarde!';
+                        break;
+                    default:
+                        errorMessage = 'Falha na conexão com a Força!';
+                }
+                
+                messageElement.textContent = errorMessage;
+                messageElement.classList.remove('text-yellow-500', 'text-green-500');
+                messageElement.classList.add('text-red-500');
+            });
     }
 
     function handleRegister(event) {
@@ -113,124 +138,117 @@
         const password = document.getElementById('newPassword').value;
         const messageElement = document.getElementById('registerMessage');
         
-        // Verificar se o usuário já existe
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (users.some(u => u.email === email)) {
-            messageElement.textContent = 'Este email já está cadastrado!';
-            messageElement.classList.remove('hidden');
-            messageElement.classList.add('text-red-500');
-            return;
-        }
-        
-        // Adicionar novo usuário
-        users.push({ name, email, password });
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        messageElement.textContent = 'Cadastro realizado com sucesso!';
+        messageElement.textContent = 'Recrutando para a Rebelião...';
         messageElement.classList.remove('hidden', 'text-red-500');
-        messageElement.classList.add('text-green-500');
+        messageElement.classList.add('text-yellow-500');
         
-        // Limpar formulário
-        document.getElementById('name').value = '';
-        document.getElementById('newEmail').value = '';
-        document.getElementById('newPassword').value = '';
-        
-        // Voltar para o login após 2 segundos
-        setTimeout(() => {
-            showLoginForm();
-        }, 2000);
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Cadastro bem-sucedido - atualizar nome do usuário
+                return userCredential.user.updateProfile({
+                    displayName: name
+                });
+            })
+            .then(() => {
+                messageElement.textContent = 'Rebelde recrutado com sucesso!';
+                messageElement.classList.remove('text-yellow-500');
+                messageElement.classList.add('text-green-500');
+                
+                // Limpar formulário
+                document.getElementById('name').value = '';
+                document.getElementById('newEmail').value = '';
+                document.getElementById('newPassword').value = '';
+                
+                setTimeout(() => {
+                    showLoginForm();
+                }, 2000);
+            })
+            .catch((error) => {
+                let errorMessage = 'Erro no recrutamento rebelde!';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Este email já está na Rebelião!';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email da Força inválido!';
+                        break;
+                    case 'auth/operation-not-allowed':
+                        errorMessage = 'Operação não permitida!';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Senha Jedi muito fraca! Use pelo menos 6 caracteres.';
+                        break;
+                    default:
+                        errorMessage = 'Falha no recrutamento rebelde!';
+                }
+                
+                messageElement.textContent = errorMessage;
+                messageElement.classList.remove('text-yellow-500', 'text-green-500');
+                messageElement.classList.add('text-red-500');
+            });
     }
 
-    // Funções de recuperação de senha
+    // Função de recuperação de senha
     function startRecovery() {
         const email = document.getElementById('recoveryEmail').value;
         const messageElement = document.getElementById('recoveryMessage');
         
-        // Verificar se o email existe
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (!users.some(u => u.email === email)) {
-            messageElement.textContent = 'Email não encontrado!';
-            messageElement.classList.add('text-red-500');
-            return;
-        }
+        messageElement.textContent = 'Enviando mensagem holográfica...';
+        messageElement.classList.remove('text-red-500', 'text-green-500');
+        messageElement.classList.add('text-yellow-500');
         
-        // Gerar código de recuperação (simulação)
-        recoveryCode = Math.floor(100000 + Math.random() * 900000).toString();
-        recoveryEmail = email;
-        
-        // Simular envio de email
-        console.log(`Código de recuperação para ${email}: ${recoveryCode}`);
-        
-        // Mostrar segunda etapa
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-        
-        messageElement.textContent = 'Código enviado para seu email!';
-        messageElement.classList.remove('text-red-500');
-        messageElement.classList.add('text-green-500');
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                messageElement.textContent = 'Mensagem holográfica enviada! Verifique seu email.';
+                messageElement.classList.remove('text-yellow-500');
+                messageElement.classList.add('text-green-500');
+                
+                setTimeout(() => {
+                    showLoginForm();
+                }, 3000);
+            })
+            .catch((error) => {
+                let errorMessage = 'Erro ao enviar mensagem holográfica!';
+                
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email Jedi inválido!';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'Jedi não encontrado nos registros!';
+                        break;
+                    default:
+                        errorMessage = 'Falha no sistema de comunicação!';
+                }
+                
+                messageElement.textContent = errorMessage;
+                messageElement.classList.remove('text-yellow-500', 'text-green-500');
+                messageElement.classList.add('text-red-500');
+            });
     }
 
-    function verifyRecoveryCode() {
-        const code = document.getElementById('recoveryCode').value;
-        const newPassword = document.getElementById('newPasswordRecovery').value;
-        const messageElement = document.getElementById('recoveryMessage');
-        
-        if (code !== recoveryCode) {
-            messageElement.textContent = 'Código inválido!';
-            messageElement.classList.remove('text-green-500');
-            messageElement.classList.add('text-red-500');
-            return;
-        }
-        
-        // Atualizar senha no "banco de dados"
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const userIndex = users.findIndex(u => u.email === recoveryEmail);
-        
-        if (userIndex !== -1) {
-            users[userIndex].password = newPassword;
-            localStorage.setItem('users', JSON.stringify(users));
-            
-            messageElement.textContent = 'Senha redefinida com sucesso!';
-            messageElement.classList.remove('text-red-500');
-            messageElement.classList.add('text-green-500');
-            
-            // Voltar para o login após 2 segundos
-            setTimeout(() => {
-                showLoginForm();
-            }, 2000);
-        }
+    // Verificar se usuário já está logado ao carregar a página
+    function checkAuthState() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // Usuário já está logado, redirecionar diretamente
+                window.location.href = 'lista.html';
+            }
+        });
     }
 
-    // Funções da tela de boas-vindas
-    function showWelcomeScreen(userName) {
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const welcomeTitle = welcomeScreen.querySelector('h1');
-        
-        welcomeTitle.textContent = `BEM-VINDO, ${userName.toUpperCase()}!`;
-        welcomeScreen.classList.remove('hidden');
-    }
-
-    function hideWelcomeScreen() {
-        document.getElementById('welcomeScreen').classList.add('hidden');
-        // Aqui você pode redirecionar para a página principal do app
-        alert('Redirecionando para a aplicação principal...');
-    }
-
-    // Inicializar as estrelas quando a página carregar
+    // Inicializar quando a página carregar
     document.addEventListener('DOMContentLoaded', function() {
         createStars();
+        checkAuthState();
 
-        // Adicionar efeito de profundidade a todos os elementos com a classe
+        // Adicionar efeito de profundidade
         document.querySelectorAll('.depth-effect').forEach(element => {
             element.addEventListener('mouseenter', function() {
                 this.style.transition = 'all 0.3s ease';
             });
         });
-
-        // Inicializar "banco de dados" se não existir
-        if (!localStorage.getItem('users')) {
-            localStorage.setItem('users', JSON.stringify([]));
-        }
     });
 
     // Expor funções para o escopo global
@@ -242,6 +260,4 @@
     window.handleLogin = handleLogin;
     window.handleRegister = handleRegister;
     window.startRecovery = startRecovery;
-    window.verifyRecoveryCode = verifyRecoveryCode;
-    window.hideWelcomeScreen = hideWelcomeScreen;
 })();

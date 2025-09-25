@@ -9,12 +9,18 @@
 </head>
 <body>
     <header>
-        <div class="perfil-usuario"></div>
+        <div class="perfil-usuario logout-btn" onclick="logout()">
+            <!-- Versão 6 -->
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
         <div class="toggle-tema-container">
             <div id="tema-btn">
                 <img src="images/jedi-icon.png" alt="imagem de tema claro/escuro" id="img-tema">
             </div>
+                
+        </button>
         </div>
+
     </header>
     <section class="all-list">
         <article class="hero">
@@ -47,5 +53,9 @@
         </div>
     </form>
     <script src="scripts/lista.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="scripts/auth.js"></script>
+
 </body>
 </html>
