@@ -1,3 +1,7 @@
+// scripts/lista.js
+import tarefasService from './tarefas-service.js';
+import { auth, onAuthStateChanged } from './firebase.js';
+
 (function () {
     "use strict";
 
@@ -16,8 +20,44 @@
     const imgTema = document.getElementById('img-tema');
     const temaSalvo = localStorage.getItem('tema');
 
-    let indexEditando = null;
+    let tarefaEditandoId = null;
     let arrTarefas = [];
+
+    // Tarefa Exemplo
+    async function adicionarTarefaExemplo() {
+        const tarefaExemplo = {
+            titulo: "Exemplo",
+            descricao: "Esta é uma tarefa de exemplo. Você pode marcar como concluída, editar seu título ou descrição e também excluí-la. Experimente interagir com os botões para ver como funciona a lista de tarefas.",
+            dataCriacao: Date.now(),
+            completo: false
+        };
+
+        try {
+            await tarefasService.adicionarTarefa(tarefaExemplo);
+        } catch (error) {
+            console.error("Erro ao adicionar tarefa de exemplo:", error);
+        }
+    }
+
+    // Inicializar observação de tarefas
+    function inicializarTarefas() {
+        tarefasService.observarTarefas(async (tarefas) => {
+            arrTarefas = tarefas;
+
+            // Se não tiver nenhuma tarefa, adiciona a tarefa de exemplo
+            if (arrTarefas.length === 0) {
+                await adicionarTarefaExemplo();
+                // Recarrega as tarefas depois de adicionar
+                tarefasService.observarTarefas((novasTarefas) => {
+                    arrTarefas = novasTarefas;
+                    mostrarTarefasNaTela();
+                });
+            } else {
+                mostrarTarefasNaTela();
+            }
+        });
+    }
+
 
     // Eventos
     addItem.addEventListener('click', () => { abrirFormulario(); });
@@ -32,10 +72,12 @@
 
             inputTitulo.placeholder = "Por favor, preencha o Título!";
             inputTitulo.focus()
-
             return;
-        } else if (indexEditando !== null) { salvarItemEditado();
-        } else {  addNovaTarefa(inputTitulo.value, areaDescricao.value); }
+        } else if (tarefaEditandoId !== null) { 
+            salvarItemEditado();
+        } else {  
+            addNovaTarefa(inputTitulo.value, areaDescricao.value); 
+        }
 
         fecharFormulario();
     });
@@ -45,10 +87,8 @@
 
     cancelarBtn.addEventListener('click', (e) => {
         e.preventDefault();
-
         inputTitulo.classList.remove('alerta');
         inputTitulo.placeholder = "Título...";
-
         fecharFormulario();
     });
 
@@ -59,32 +99,34 @@
         temaBtn.classList.toggle('tema-ativado');
     });
 
-
     listaTarefas.addEventListener('click', (e) => {
         const itemAtual = e.target.closest('li');
         if (!itemAtual) return;
 
-        const index = parseInt(itemAtual.dataset.index, 10);
+        const tarefaId = itemAtual.dataset.id;
         const funcao = e.target.getAttribute('data-function');
 
         switch (funcao) {
             case 'check-btn':
-                alternarCheck(index, itemAtual);
+                alternarCheck(tarefaId, itemAtual);
                 break;
             case 'excluir-btn':
-                removerItem(index);
+                removerItem(tarefaId);
                 break;
             case 'edit-btn':
-                editarItem(index);
+                editarItem(tarefaId);
                 break;
         }
     });
 
     // Funções para a Renderização das Tarefas
-    function gerarTarefaLi(obj, index) {
+    function gerarTarefaLi(obj) {
+        console.log('Criando li para tarefa:', obj);
+
+
         const item = document.createElement('li');
         item.classList.add('item-lista');
-        item.dataset.index = index;
+        item.dataset.id = obj.id;
 
         item.innerHTML = `
             <button class="check-btn ${obj.completo ? 'tarefa-concluida' : ''}" data-function="check-btn">
@@ -100,54 +142,86 @@
     }
 
     function mostrarTarefasNaTela() {
+        console.log('Mostrar tarefas:', arrTarefas);
+
         listaTarefas.innerHTML = '';
-        arrTarefas.forEach((task, index) => {
-            listaTarefas.appendChild(gerarTarefaLi(task, index));
+        
+        // if (arrTarefas.length === 0) {
+        //     listaTarefas.innerHTML = `
+        //         <li class="item-lista vazio">
+        //             <p class="item-p">Nenhuma tarefa encontrada. Que a Força esteja com suas novas tarefas!</p>
+        //         </li>
+        //     `;
+        //     return;
+        // }
+
+        arrTarefas.forEach((task) => {
+            listaTarefas.appendChild(gerarTarefaLi(task));
         });
     }
 
     // Funções para a Manipulação das Tarefas
-    function addNovaTarefa(titulo, descricao) {
-        arrTarefas.push({
-            titulo,
-            descricao,
-            dataCriacao: Date.now(),
-            completo: false
-        });
-        salvarNoLocalStorage();
-        mostrarTarefasNaTela();
+    async function addNovaTarefa(titulo, descricao) {
+        try {
+            await tarefasService.adicionarTarefa({
+                titulo: titulo.trim(),
+                descricao: descricao.trim(),
+                completo: false
+            });
+        } catch (error) {
+            console.error('Erro ao adicionar tarefa:', error);
+            alert('Erro ao adicionar tarefa. Tente novamente.');
+        }
     }
 
-    function removerItem(index) {
-        arrTarefas.splice(index, 1);
-        salvarNoLocalStorage();
-        mostrarTarefasNaTela();
+    async function removerItem(tarefaId) {
+        // if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+            try {
+                await tarefasService.excluirTarefa(tarefaId);
+            } catch (error) {
+                console.error('Erro ao excluir tarefa:', error);
+                alert('Erro ao excluir tarefa. Tente novamente.');
+            }
+        // }
     }
 
-    function editarItem(index) {
-        indexEditando = index;
-        inputTitulo.value = arrTarefas[index].titulo;
-        areaDescricao.value = arrTarefas[index].descricao;
-        abrirFormulario();
+    function editarItem(tarefaId) {
+        const tarefa = arrTarefas.find(t => t.id === tarefaId);
+        if (tarefa) {
+            tarefaEditandoId = tarefaId;
+            inputTitulo.value = tarefa.titulo;
+            areaDescricao.value = tarefa.descricao || '';
+            abrirFormulario();
+        }
     }
 
-    function salvarItemEditado() {
-        arrTarefas[indexEditando].titulo = inputTitulo.value;
-        arrTarefas[indexEditando].descricao = areaDescricao.value;
-        indexEditando = null;
-        salvarNoLocalStorage();
-        mostrarTarefasNaTela();
+    async function salvarItemEditado() {
+        try {
+            await tarefasService.atualizarTarefa(tarefaEditandoId, {
+                titulo: inputTitulo.value.trim(),
+                descricao: areaDescricao.value.trim()
+            });
+            tarefaEditandoId = null;
+        } catch (error) {
+            console.error('Erro ao editar tarefa:', error);
+            alert('Erro ao editar tarefa. Tente novamente.');
+        }
     }
 
-    function alternarCheck(index, itemAtual) {
-        arrTarefas[index].completo = !arrTarefas[index].completo;
-        const checkIcon = itemAtual.querySelector('.check-btn-i');
-        const checkBtn = itemAtual.querySelector('.check-btn');
-        const texto = itemAtual.querySelector('.item-p');
-        checkIcon.classList.toggle('displayNone', !arrTarefas[index].completo);
-        texto.classList.toggle('tarefa-concluida', arrTarefas[index].completo);
-        checkBtn.classList.toggle('tarefa-concluida', arrTarefas[index].completo);
-        salvarNoLocalStorage();
+    async function alternarCheck(tarefaId, itemAtual) {
+        const tarefa = arrTarefas.find(t => t.id === tarefaId);
+        if (!tarefa) return;
+
+        const novoEstado = !tarefa.completo;
+        
+        try {
+            await tarefasService.atualizarTarefa(tarefaId, {
+                completo: novoEstado
+            });
+        } catch (error) {
+            console.error('Erro ao atualizar tarefa:', error);
+            alert('Erro ao atualizar tarefa. Tente novamente.');
+        }
     }
 
     // Funções para manipulação dos formulários
@@ -155,18 +229,21 @@
         formItem.style.display = 'flex';
         inputTitulo.focus();
         
-        if (indexEditando !== null) { editarOuSalvar.textContent = "Editar Tarefa"; } 
-        else { editarOuSalvar.textContent = "Salvar Tarefa"; }
+        if (tarefaEditandoId !== null) { 
+            editarOuSalvar.textContent = "Editar Tarefa"; 
+        } else { 
+            editarOuSalvar.textContent = "Salvar Tarefa"; 
+        }
     }
 
     function fecharFormulario() {
         formItem.style.display = 'none';
         inputTitulo.value = '';
         areaDescricao.value = '';
-        indexEditando = null;
+        tarefaEditandoId = null;
+        limparAlerta();
     }
 
-    
     function limparAlerta(){
         inputTitulo.classList.remove('alerta'); 
         inputTitulo.placeholder = "Título...";
@@ -197,31 +274,26 @@
     }
 
     // Define tema inicial
-    if (temaSalvo) { aplicarTema(temaSalvo); } 
-    else { aplicarTema(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
-
-    // Funções de localStorage
-    function salvarNoLocalStorage() { localStorage.setItem('tarefas', JSON.stringify(arrTarefas)); }
-
-    function carregarDoLocalStorage() {
-        const dados = localStorage.getItem('tarefas');
-
-        if (dados) {
-            arrTarefas = JSON.parse(dados);
-        } else {
-            arrTarefas = [
-                {
-                    titulo: "Exemplo",
-                    descricao: "Esta é uma tarefa de exemplo. Você pode marcar como concluída, editar seu título ou descrição e também excluí-la. Experimente interagir com os botões para ver como funciona a lista de tarefas.",
-                    dataCriacao: Date.now(),
-                    completo: false
-                }
-            ];
-            salvarNoLocalStorage();
-        }
+    if (temaSalvo) { 
+        aplicarTema(temaSalvo); 
+    } else { 
+        aplicarTema(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); 
     }
 
-    // Inicialização do Sistema
-    carregarDoLocalStorage();
-    mostrarTarefasNaTela();
+    // Inicialização
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     inicializarTarefas();
+    // });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                inicializarTarefas();
+            } else {
+                // redirecionar para login ou mostrar mensagem
+                window.location.href = 'login.html';
+            }
+        });
+    });
+
 })();
