@@ -492,6 +492,8 @@ input:-webkit-autofill:active {
 .edit-btns button:hover{ color: var(--secondary-color); }
 .edit-btns button:hover::before{ transform: scaleX(1); }
 
+.displayNone { display: none; }
+
 @media screen and (max-width: 600px){
     .edit-container{
         width: 100vw;
