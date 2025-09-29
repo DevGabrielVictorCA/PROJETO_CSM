@@ -142,7 +142,7 @@ header div{
     position: relative;
     flex-direction: column;
     width: 600px;
-    max-height: 600px;
+    max-height: 500px;
     min-height: 400px;
     height: auto;
     border: 2px solid var(--secondary-color);
@@ -356,13 +356,14 @@ header div{
     border: 2px solid var(--secondary-color);
     width: 600px;
     height: 90%;
+    max-height: 600px;
     z-index: 10;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px 20px;
     font-size: 20px;
-    border-radius: 10px;
+    border-radius: 20px;
     transition: all var(--first-time) ease-in-out;
 }
 

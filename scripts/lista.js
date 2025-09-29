@@ -121,9 +121,6 @@ import { auth, onAuthStateChanged } from './firebase.js';
 
     // Funções para a Renderização das Tarefas
     function gerarTarefaLi(obj) {
-        console.log('Criando li para tarefa:', obj);
-
-
         const item = document.createElement('li');
         item.classList.add('item-lista');
         item.dataset.id = obj.id;
@@ -142,8 +139,6 @@ import { auth, onAuthStateChanged } from './firebase.js';
     }
 
     function mostrarTarefasNaTela() {
-        console.log('Mostrar tarefas:', arrTarefas);
-
         listaTarefas.innerHTML = '';
         
         // if (arrTarefas.length === 0) {
