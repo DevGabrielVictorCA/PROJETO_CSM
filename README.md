@@ -27,36 +27,31 @@ This project includes **user authentication (login/register)**, secure storage o
 - **CSS3** – custom styles, responsive layout, Star Wars theme  
 - **Vanilla JavaScript (ES6)** – DOM manipulation & API integration  
 
-### Backend  
-- **Firebase Data - para armazenamento na nuvem   
+### Backend  & Database
+- **Firebase Authentication - for storing user logins;
+- **Firestore Database - for storing user notes.
 
-### Database  
-- **MySQL** – persistent storage for users & notes  
 
 ---
 
 ## Project Structure 
 
-#### **notepad-starwars/
+project-root/
+├── images/                 # Folder for images (icons, logos, etc.)
 │
-#### ├── frontend/
-- │ ├── index.html # Main notepad page
-- │ ├── login.html # Login page
-- │ ├── register.html # Registration page
-- │ ├── styles.css # Star Wars themed styles
-- │ ├── app.js # Notepad logic
-- │ ├── login.js # Login API integration
-- │ └── register.js # Register API integration
-
-#### ├── backend/
-- │ ├── src/main/java/com/starwars/notepad/
-- │ │ ├── controller/ # REST controllers
-- │ │ ├── model/ # Entities (User, Note)
-- │ │ ├── repository/ # JPA repositories
-- │ │ ├── security/ # JWT + Security config
-- │ │ └── service/ # Business logic
-- │ └── src/main/resources/
-- │ └── application.properties # DB configs
+├── scripts/                # JavaScript files
+│   ├── auth.js             # Authentication logic
+│   ├── fibase.js           # Firebase config/initialization (probably meant to be firebase.js)
+│   ├── lista.js            # Logic for handling list page
+│   └── script.js           # General scripts for index or other pages
+│
+├── styles/                 # CSS styles
+│   ├── lista.css           # Styles specific to lista.html
+│   └── style.css           # Global styles
+│
+├── index.html              # Main entry page
+├── lista.html              # Secondary page (list)
+├── README.md               # Project documentation
 
 
 #### └── README.md**
