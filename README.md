@@ -2,22 +2,21 @@
   <img src="images/logomodulo.png" alt="Logo Faculdade" width="150"/>
 </p>
 
-
 # 📝 Notepad Star Wars  
 
-A **Star Wars-inspired notepad web application** where users can create, edit, and manage notes with a galactic theme.  
-This project includes **user authentication (login/register)**, secure storage of notes, and a themed frontend experience.  
+A **Star Wars-inspired notepad web application** where users can create, edit, and manage tasks with a galactic theme.  
+This project includes **user authentication (login/register)**, secure storage of tasks in Firebase, and a themed frontend experience.  
 
 ---
 
 ## 🚀 Features  
-- User **Registration & Login** (JWT Authentication)  
-- Create, edit, and delete personal notes  
-- Notes stored safely in a **MySQL database**  
+- User **Registration & Login** (Firebase Authentication)  
+- Create, edit, and delete personal tasks  
+- Tasks stored safely in **Firebase Firestore**  
 - Star Wars-inspired **UI and animations**  
-- Responsive design with **HTML5 + CSS3**  
-- Interactive frontend powered by **Vanilla JavaScript**  
-- Backend API built with **Java + Spring Boot**  
+- Responsive design with **HTML5 + CSS3 + Tailwind**  
+- Interactive frontend powered by **Vanilla JavaScript (ES6)**  
+- Full frontend-based CRUD operations with Firebase  
 
 ---
 
@@ -25,58 +24,103 @@ This project includes **user authentication (login/register)**, secure storage o
 ### Frontend  
 - **HTML5** – semantic structure  
 - **CSS3** – custom styles, responsive layout, Star Wars theme  
-- **Vanilla JavaScript (ES6)** – DOM manipulation & API integration  
+- **Tailwind CSS** – fast and responsive styling  
+- **Vanilla JavaScript (ES6)** – DOM manipulation and Firebase integration  
 
-### Backend  
-- **Firebase Data - para armazenamento na nuvem   
-
-### Database  
-- **MySQL** – persistent storage for users & notes  
+### Backend / Services  
+- **Firebase Authentication** – login and registration  
+- **Firebase Firestore** – cloud storage for tasks  
 
 ---
 
 ## Project Structure 
 
-#### **notepad-starwars/
+### Frontend
 │
 #### ├── frontend/
-- │ ├── index.html # Main notepad page
-- │ ├── login.html # Login page
-- │ ├── register.html # Registration page
-- │ ├── styles.css # Star Wars themed styles
-- │ ├── app.js # Notepad logic
-- │ ├── login.js # Login API integration
-- │ └── register.js # Register API integration
+- │ ├── index.html                        # Home page with project presentation, login and registration modals
+- │ ├── styles.css                        # Styles for index.html
+- │ ├── script.js                         # Handles home page logic, login and registration functionality
+- │ ├── lista.html                        # Page displaying user tasks
+- │ └── lista.css                         # Styles for lista.html
+- │ └── scripts/lista.js                  # Handles task listing, CRUD operations, and logout logic in lista.html
 
-#### ├── backend/
-- │ ├── src/main/java/com/starwars/notepad/
-- │ │ ├── controller/ # REST controllers
-- │ │ ├── model/ # Entities (User, Note)
-- │ │ ├── repository/ # JPA repositories
-- │ │ ├── security/ # JWT + Security config
-- │ │ └── service/ # Business logic
-- │ └── src/main/resources/
-- │ └── application.properties # DB configs
+---
 
+### Backend / Services
+- │ ├── scripts/firebase-config.js        # Firebase configuration (API keys, project info)
+- │ ├── scripts/firebase.js               # Firebase SDK initialization and exports
+- │ ├── scripts/auth.js                   # User authentication: login, registration, logout
+- │ ├── scripts/tarefas-service.js        # CRUD operations for Tasks collection in Firestore
 
 #### └── README.md**
 
 ---
 
-## Database Schema Diagram.
+## 📝 CRUD of the Chosen Entity
 
-**Made with MySQL Workbench**
+### Chosen Entity: Tasks
+We chose the **Tasks** entity because it is central to the app's functionality: the main goal of the project is to manage tasks efficiently, so this entity represents the core of the system.  
+
+### Implemented Features
+- **Listing**: View all registered tasks.  
+- **Creation**: Form to add a new task.  
+- **Details**: Page to view detailed information about each task.  
+- **Update**: Edit existing tasks.  
+- **Deletion**: Remove tasks from the database.  
+
+### Database Integration
+- **Firebase Firestore** is used as a cloud database to store all tasks.  
+- **Firebase Authentication** handles user login and registration.  
+- The frontend built with **HTML, CSS, and Tailwind** communicates directly with Firebase using JavaScript (SDK).
+
+### Challenges Encountered
+- Integrating Firebase Authentication and Firestore CRUD with Vanilla JavaScript.
+- Handling real-time updates using `onSnapshot`.
+- Implementing form validation and managing login/registration modals.
+- Ensuring proper user authentication and secure access to tasks.
+
+### Validation and Security
+- Form validation using HTML5 and JavaScript to ensure required fields are filled.  
+- User authentication and Firebase security rules guarantee that only logged-in users can access their tasks. 
+- **Note:** Since this project uses Firebase Firestore (NoSQL), SQL injection is not applicable. Firebase security rules enforce secure access for authenticated users only.
+
+---
+
+## 🚀 Usage
+
+1. Open `index.html` in a browser.  
+2. Register a new account or log in with existing credentials.  
+3. After login, you are automatically redirected to `lista.html` to view your tasks.  
+4. Create a new task using the “Add Task” form.  
+5. Edit or delete tasks directly from the list.  
+6. Use the logout button to safely exit your session.
+
+---
+
+## Database Schema Diagram
+
+**Represented as Firestore collections and documents**
 
 ![Diagram](images/digram-notepad-starwars.png)
 
 ---
-# Group Work
 
-| Versão | Data       | Alterações                                                                 |
-|--------|-----------|---------------------------------------------------------------------------|
-| 1.3.0  | 20/08/2025 | ***Sabrina*** created the README file containing the technologies and visual diagram of the project.        |
-| 1.2.0  | 15/08/2025 | ***Gabriel*** started the project.  |
-| 1.1.0  | 14/08/2025 | Project opening.                                       |
+# Change Log
+
+| Version | Date       | Changes                                                                 |
+|---------|-----------|-------------------------------------------------------------------------|
+| 1.1.0   | 14/08/2025 | Project opening.                                                       |
+| 1.2.0   | 15/08/2025 | ***Gabriel*** started the project and created the task page with basic task functionality. |
+| 1.3.0   | 20/08/2025 | ***Sabrina*** created the README file containing technologies and project diagram. |
+| 1.3.1   | 20/08/2025 | ***Gabriel*** made minor changes to `script.js`.                       |
+| 1.4.0   | 01/09/2025 | ***Sabrina*** created the home page with basic project information.    |
+| 1.4.1   | 01/09/2025 | ***Gabriel*** organized styles and scripts between the home and tasks pages. |
+| 1.4.2   | 02/09/2025 | ***Gabriel*** corrected responsive style issues on the pages.          |
+| 1.5.0   | 17/09/2025 | ***Sabrina*** improved aspects of the home page and launched login/register forms. |
+| 1.6.0   | 25/09/2025 | ***Gabriel & Sabrina*** connected the pages to Firestore, enabling login and registration functionality. |
+| 1.7.0   | 26/09/2025 | ***Gabriel*** connected the tasks CRUD system to Firestore.            |
+| 1.8.0   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
 
 ---
 
@@ -85,9 +129,11 @@ This project includes **user authentication (login/register)**, secure storage o
 ### Developed by [Sabrina dos Santos, Gabriel Victor Cardoso, Jéssica Akemy, Hugo Rocha, Maria Núbia, Thomas] ✨
 May the Force (and the Code) be with You ⚡
 
+---
+
 ## ⚙️ Installation & Setup  
 
 ### 1. Clone the Repository  
 ```bash
 git clone https://github.com/notepad-star-wars/PROJETO_CSM.git
-cd your-past-name/PROJETO_CSM
+cd PROJETO_CSM
