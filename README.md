@@ -28,10 +28,7 @@ This project includes **user authentication (login/register)**, secure storage o
 - **Vanilla JavaScript (ES6)** – DOM manipulation & API integration  
 
 ### Backend  
-- **Java (17+)** – core language  
-- **Spring Boot** – REST API  
-- **Spring Security + JWT** – authentication & authorization  
-- **Spring Data JPA** – database interactions  
+- **Firebase Data - para armazenamento na nuvem   
 
 ### Database  
 - **MySQL** – persistent storage for users & notes  
