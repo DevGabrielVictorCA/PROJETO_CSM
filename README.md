@@ -11,13 +11,12 @@ This project includes **user authentication (login/register)**, secure storage o
 ---
 
 ## 🚀 Features  
-- User **Registration & Login** (JWT Authentication)  
+- User **Registration & Login** (Firebase Authentication)  
 - Create, edit, and delete personal notes  
-- Notes stored safely in a **MySQL database**  
+- Notes stored safely in a **Firestore Database** 
 - Star Wars-inspired **UI and animations**  
 - Responsive design with **HTML5 + CSS3**  
 - Interactive frontend powered by **Vanilla JavaScript**  
-- Backend API built with **Java + Spring Boot**  
 
 ---
 
