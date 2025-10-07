@@ -120,7 +120,8 @@ We chose the **Tasks** entity because it is central to the app's functionality: 
 | 1.5.0   | 17/09/2025 | ***Sabrina*** improved aspects of the home page and launched login/register forms. |
 | 1.6.0   | 25/09/2025 | ***Gabriel & Sabrina*** connected the pages to Firestore, enabling login and registration functionality. |
 | 1.7.0   | 26/09/2025 | ***Gabriel*** connected the tasks CRUD system to Firestore.            |
-| 1.8.0   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
+| 1.7.1   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
+| 1.8.0   | 06/10/2025 | ***Gabriel*** Gabriel added task categories and linked them to Firestore.  |
 
 ---
 
