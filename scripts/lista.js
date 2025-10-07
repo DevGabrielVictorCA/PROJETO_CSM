@@ -1,11 +1,10 @@
 // scripts/lista.js
 import tarefasService from './tarefas-service.js';
-import { auth, onAuthStateChanged } from './firebase.js';
+import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from './firebase.js';
 
 (function () {
     "use strict";
 
-    // Seletores
     const addItem = document.querySelector('.add-item');
     const cancelarBtn = document.querySelector('.cancelar-btn');
     const salvarBtn = document.querySelector('.salvar-btn');
@@ -19,108 +18,49 @@ import { auth, onAuthStateChanged } from './firebase.js';
     const imgIndicador = document.getElementById('img-indicador');
     const imgTema = document.getElementById('img-tema');
     const temaSalvo = localStorage.getItem('tema');
+    const categoriaSelect = document.getElementById('categoriaSelect');
 
     let tarefaEditandoId = null;
     let arrTarefas = [];
 
-    // Tarefa Exemplo
+    // -------------------------
+    // Funções auxiliares
+    // -------------------------
+
     async function adicionarTarefaExemplo() {
         const tarefaExemplo = {
             titulo: "Exemplo",
-            descricao: "Esta é uma tarefa de exemplo. Você pode marcar como concluída, editar seu título ou descrição e também excluí-la. Experimente interagir com os botões para ver como funciona a lista de tarefas.",
+            descricao: "Esta é uma tarefa de exemplo.",
             dataCriacao: Date.now(),
             completo: false
         };
-
-        try {
-            await tarefasService.adicionarTarefa(tarefaExemplo);
-        } catch (error) {
-            console.error("Erro ao adicionar tarefa de exemplo:", error);
+        try { 
+            await tarefasService.adicionarTarefa(tarefaExemplo); 
+        } catch (error) { 
+            console.error(error); 
         }
     }
 
-    // Inicializar observação de tarefas
-    function inicializarTarefas() {
-        tarefasService.observarTarefas(async (tarefas) => {
-            arrTarefas = tarefas;
+    async function carregarCategorias() {
+        categoriaSelect.innerHTML = `<option value="">Selecione uma categoria</option>`; // reset
 
-            // Se não tiver nenhuma tarefa, adiciona a tarefa de exemplo
-            if (arrTarefas.length === 0) {
-                await adicionarTarefaExemplo();
-                // Recarrega as tarefas depois de adicionar
-                tarefasService.observarTarefas((novasTarefas) => {
-                    arrTarefas = novasTarefas;
-                    mostrarTarefasNaTela();
-                });
-            } else {
-                mostrarTarefasNaTela();
-            }
+        const categoriasSnapshot = await getDocs(collection(db, 'categorias'));
+        categoriasSnapshot.forEach(categoriaDoc => {
+            const data = categoriaDoc.data();
+            const option = document.createElement('option');
+            option.value = categoriaDoc.id;       // id do documento
+            option.textContent = data.nome;      // campo correto
+            categoriaSelect.appendChild(option);
         });
     }
 
-
-    // Eventos
-    addItem.addEventListener('click', () => { abrirFormulario(); });
-
-    salvarBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        if(!inputTitulo.value.trim()){ 
-            inputTitulo.classList.remove('alerta');
-            void inputTitulo.offsetWidth;
-            inputTitulo.classList.add('alerta'); 
-
-            inputTitulo.placeholder = "Por favor, preencha o Título!";
-            inputTitulo.focus()
-            return;
-        } else if (tarefaEditandoId !== null) { 
-            salvarItemEditado();
-        } else {  
-            addNovaTarefa(inputTitulo.value, areaDescricao.value); 
+    async function gerarTarefaLi(obj) {
+        let nomeCategoria = '';
+        if (obj.categoriaRef) {
+            const categoriaDoc = await getDoc(obj.categoriaRef);
+            if (categoriaDoc.exists()) nomeCategoria = categoriaDoc.data().Campo;
         }
 
-        fecharFormulario();
-    });
-
-    inputTitulo.addEventListener('input', () => { limparAlerta() })
-    areaDescricao.addEventListener('focus', () => { limparAlerta() })
-
-    cancelarBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        inputTitulo.classList.remove('alerta');
-        inputTitulo.placeholder = "Título...";
-        fecharFormulario();
-    });
-
-    temaBtnContainer.addEventListener('click', () => {
-        const temaAtual = document.documentElement.getAttribute('data-tema');
-        const novoTema = temaAtual === 'light' ? 'dark' : 'light';
-        aplicarTema(novoTema);
-        temaBtn.classList.toggle('tema-ativado');
-    });
-
-    listaTarefas.addEventListener('click', (e) => {
-        const itemAtual = e.target.closest('li');
-        if (!itemAtual) return;
-
-        const tarefaId = itemAtual.dataset.id;
-        const funcao = e.target.getAttribute('data-function');
-
-        switch (funcao) {
-            case 'check-btn':
-                alternarCheck(tarefaId, itemAtual);
-                break;
-            case 'excluir-btn':
-                removerItem(tarefaId);
-                break;
-            case 'edit-btn':
-                editarItem(tarefaId);
-                break;
-        }
-    });
-
-    // Funções para a Renderização das Tarefas
-    function gerarTarefaLi(obj) {
         const item = document.createElement('li');
         item.classList.add('item-lista');
         item.dataset.id = obj.id;
@@ -130,105 +70,28 @@ import { auth, onAuthStateChanged } from './firebase.js';
                 <i class="check-btn-i fa-solid fa-check ${obj.completo ? '' : 'displayNone'}" data-function="check-btn"></i>
             </button>
             <p class="item-p ${obj.completo ? 'tarefa-concluida' : ''}" data-function="edit-btn">
-                ${obj.titulo}
+                ${obj.titulo} ${nomeCategoria ? `<span class="categoria">[${nomeCategoria}]</span>` : ''}
             </p>
             <i class="fa-regular fa-trash-can excluir-btn" data-function="excluir-btn"></i>
         `;
-
         return item;
     }
 
-    function mostrarTarefasNaTela() {
+    async function mostrarTarefasNaTela() {
         listaTarefas.innerHTML = '';
-        
-        // if (arrTarefas.length === 0) {
-        //     listaTarefas.innerHTML = `
-        //         <li class="item-lista vazio">
-        //             <p class="item-p">Nenhuma tarefa encontrada. Que a Força esteja com suas novas tarefas!</p>
-        //         </li>
-        //     `;
-        //     return;
-        // }
-
-        arrTarefas.forEach((task) => {
-            listaTarefas.appendChild(gerarTarefaLi(task));
-        });
+        const itens = await Promise.all(arrTarefas.map(gerarTarefaLi));
+        itens.forEach(item => listaTarefas.appendChild(item));
     }
 
-    // Funções para a Manipulação das Tarefas
-    async function addNovaTarefa(titulo, descricao) {
-        try {
-            await tarefasService.adicionarTarefa({
-                titulo: titulo.trim(),
-                descricao: descricao.trim(),
-                completo: false
-            });
-        } catch (error) {
-            console.error('Erro ao adicionar tarefa:', error);
-            alert('Erro ao adicionar tarefa. Tente novamente.');
-        }
+    function limparAlerta() {
+        inputTitulo.classList.remove('alerta');
+        inputTitulo.placeholder = "Título...";
     }
 
-    async function removerItem(tarefaId) {
-        // if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
-            try {
-                await tarefasService.excluirTarefa(tarefaId);
-            } catch (error) {
-                console.error('Erro ao excluir tarefa:', error);
-                alert('Erro ao excluir tarefa. Tente novamente.');
-            }
-        // }
-    }
-
-    function editarItem(tarefaId) {
-        const tarefa = arrTarefas.find(t => t.id === tarefaId);
-        if (tarefa) {
-            tarefaEditandoId = tarefaId;
-            inputTitulo.value = tarefa.titulo;
-            areaDescricao.value = tarefa.descricao || '';
-            abrirFormulario();
-        }
-    }
-
-    async function salvarItemEditado() {
-        try {
-            await tarefasService.atualizarTarefa(tarefaEditandoId, {
-                titulo: inputTitulo.value.trim(),
-                descricao: areaDescricao.value.trim()
-            });
-            tarefaEditandoId = null;
-        } catch (error) {
-            console.error('Erro ao editar tarefa:', error);
-            alert('Erro ao editar tarefa. Tente novamente.');
-        }
-    }
-
-    async function alternarCheck(tarefaId, itemAtual) {
-        const tarefa = arrTarefas.find(t => t.id === tarefaId);
-        if (!tarefa) return;
-
-        const novoEstado = !tarefa.completo;
-        
-        try {
-            await tarefasService.atualizarTarefa(tarefaId, {
-                completo: novoEstado
-            });
-        } catch (error) {
-            console.error('Erro ao atualizar tarefa:', error);
-            alert('Erro ao atualizar tarefa. Tente novamente.');
-        }
-    }
-
-    // Funções para manipulação dos formulários
     function abrirFormulario() {
         formItem.style.display = 'flex';
         inputTitulo.focus();
-        
-        if (tarefaEditandoId !== null) { 
-            editarOuSalvar.textContent = "Editar Tarefa"; 
-        } else { 
-            editarOuSalvar.textContent = "Salvar Tarefa"; 
-        }
+        editarOuSalvar.textContent = tarefaEditandoId ? "Editar Tarefa" : "Salvar Tarefa";
     }
 
     function fecharFormulario() {
@@ -236,56 +99,118 @@ import { auth, onAuthStateChanged } from './firebase.js';
         inputTitulo.value = '';
         areaDescricao.value = '';
         tarefaEditandoId = null;
+        categoriaSelect.value = '';
         limparAlerta();
     }
 
-    function limparAlerta(){
-        inputTitulo.classList.remove('alerta'); 
-        inputTitulo.placeholder = "Título...";
+    // -------------------------
+    // Eventos
+    // -------------------------
+
+    addItem.addEventListener('click', abrirFormulario);
+
+    salvarBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (!inputTitulo.value.trim()) {
+            inputTitulo.classList.add('alerta');
+            inputTitulo.placeholder = "Por favor, preencha o Título!";
+            return;
+        }
+
+        const novaTarefa = {
+            titulo: inputTitulo.value.trim(),
+            descricao: areaDescricao.value.trim(),
+            completo: false,
+            categoriaRef: categoriaSelect.value ? doc(db, 'categorias', categoriaSelect.value) : null
+        };
+
+        try {
+            if (tarefaEditandoId) {
+                await tarefasService.atualizarTarefa(tarefaEditandoId, novaTarefa);
+                tarefaEditandoId = null;
+            } else {
+                await tarefasService.adicionarTarefa(novaTarefa);
+            }
+            fecharFormulario();
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    cancelarBtn.addEventListener('click', (e) => { e.preventDefault(); fecharFormulario(); });
+
+    listaTarefas.addEventListener('click', async (e) => {
+        const itemAtual = e.target.closest('li');
+        if (!itemAtual) return;
+
+        const tarefaId = itemAtual.dataset.id;
+        const funcao = e.target.getAttribute('data-function');
+
+        switch (funcao) {
+            case 'check-btn': alternarCheck(tarefaId); break;
+            case 'excluir-btn': removerItem(tarefaId); break;
+            case 'edit-btn': editarItem(tarefaId); break;
+        }
+    });
+
+    function editarItem(tarefaId) {
+        const tarefa = arrTarefas.find(t => t.id === tarefaId);
+        if (!tarefa) return;
+
+        tarefaEditandoId = tarefaId;
+        inputTitulo.value = tarefa.titulo;
+        areaDescricao.value = tarefa.descricao || '';
+        categoriaSelect.value = tarefa.categoriaRef ? tarefa.categoriaRef.id : '';
+        abrirFormulario();
     }
 
-    // Função para aplicar tema e trocar ícone
+    async function alternarCheck(tarefaId) {
+        const tarefa = arrTarefas.find(t => t.id === tarefaId);
+        if (!tarefa) return;
+        await tarefasService.atualizarTarefa(tarefaId, { completo: !tarefa.completo });
+    }
+
+    async function removerItem(tarefaId) {
+        await tarefasService.excluirTarefa(tarefaId);
+    }
+
+    function inicializarTarefas() {
+        tarefasService.observarTarefas(async (tarefas) => {
+            arrTarefas = tarefas;
+            if (!arrTarefas.length) await adicionarTarefaExemplo();
+            mostrarTarefasNaTela();
+        });
+    }
+
+    // -------------------------
+    // Tema
+    // -------------------------
+
     function aplicarTema(tema) {
         document.documentElement.setAttribute('data-tema', tema);
-        imgIndicador.classList.add('fade-out');
-        imgTema.classList.add('fade-out')
-
-        setTimeout(() => {
-            imgIndicador.src = tema === 'dark' ? 'images/imperio-icon.png' : 'images/jedi-icon.png';
-            imgIndicador.classList.remove('fade-out');
-            imgIndicador.classList.add('fade-in');
-
-            imgTema.src = tema === 'dark' ? 'images/vader-icon.png' : 'images/yoda-icon.png';
-            imgTema.classList.remove('fade-out');
-            imgTema.classList.add('fade-in');
-
-            setTimeout(() => { 
-                imgIndicador.classList.remove('fade-in'),
-                imgTema.classList.remove('fade-in')
-            }, 500);
-        }, 150);
-
+        imgIndicador.src = tema === 'dark' ? 'images/imperio-icon.png' : 'images/jedi-icon.png';
+        imgTema.src = tema === 'dark' ? 'images/vader-icon.png' : 'images/yoda-icon.png';
         localStorage.setItem('tema', tema);
     }
 
-    // Define tema inicial
-    if (temaSalvo) { 
-        aplicarTema(temaSalvo); 
-    } else { 
-        aplicarTema(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); 
-    }
+    temaBtnContainer.addEventListener('click', () => {
+        const temaAtual = document.documentElement.getAttribute('data-tema');
+        aplicarTema(temaAtual === 'light' ? 'dark' : 'light');
+    });
 
-    // Inicialização
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     inicializarTarefas();
-    // });
+    if (temaSalvo) aplicarTema(temaSalvo);
+    else aplicarTema(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        onAuthStateChanged(auth, (user) => {
+    // -------------------------
+    // Inicialização com autenticação
+    // -------------------------
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
+                await carregarCategorias();
                 inicializarTarefas();
             } else {
-                // redirecionar para login ou mostrar mensagem
                 window.location.href = 'login.html';
             }
         });
