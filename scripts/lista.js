@@ -48,9 +48,13 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
         categoriasSnapshot.forEach(categoriaDoc => {
             const data = categoriaDoc.data();
             const option = document.createElement('option');
-            option.value = categoriaDoc.id;       // id do documento
-            option.textContent = data.nome;      // campo correto
+            option.value = categoriaDoc.id;       
+            option.textContent = data.nome;      
             categoriaSelect.appendChild(option);
+        });
+
+        categoriaSelect.addEventListener('change', () => {
+            categoriaSelect.blur(); // remove o foco ao selecionar uma opção
         });
     }
 

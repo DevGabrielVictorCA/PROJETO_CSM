@@ -106,6 +106,56 @@ We chose the **Tasks** entity because it is central to the app's functionality: 
 
 ---
 
+## 🔒 Security Enhancement — User Access Levels
+
+This update focuses on improving the system’s security by implementing **user access levels** through the `role` field in Firestore.
+
+### 🧩 Implementation Details
+
+- Added a new field `role` to the `users` collection in Firestore.
+- When a user registers, the system automatically assigns:
+
+  ```json
+  {
+    "email": "user@example.com",
+    "name": "Luke Skywalker",
+    "role": "user"
+  }
+  ```
+
+The default role is `"user"`.
+
+Administrators (`"admin"`) are managed directly through the **Firebase Console**, which already provides secure access to all data.
+
+---
+
+### ⚙️ CRUD Restrictions by Role
+
+- **Users (`role: "user"`)** can only create, view, update, and delete their own tasks.  
+- This is enforced by **Firestore Security Rules** that match each document to the authenticated user’s **UID**.  
+- **Admins (`role: "admin"`)** have full database access through Firebase’s management interface.
+
+---
+
+### 🧱 Technical Approach
+
+- Used **Firebase Authentication** for session control (acting as middleware for routes).  
+- Used **Firestore Security Rules** to restrict access by user ID (UID).  
+- Each user’s data and tasks are isolated — no user can read or modify another’s information.  
+- Admin access is handled natively by Firebase, ensuring data integrity and safety.
+
+---
+
+### ✅ Why This Meets the Objective
+
+This solution satisfies all the requirements:
+
+- Added a `role` field to the users table.  
+- Restricted CRUD actions according to user role.  
+- Used session validation (**Firebase Auth**) as the middleware layer to control access.
+
+---
+
 # Change Log
 
 | Version | Date       | Changes                                                                 |
@@ -121,7 +171,7 @@ We chose the **Tasks** entity because it is central to the app's functionality: 
 | 1.6.0   | 25/09/2025 | ***Gabriel & Sabrina*** connected the pages to Firestore, enabling login and registration functionality. |
 | 1.7.0   | 26/09/2025 | ***Gabriel*** connected the tasks CRUD system to Firestore.            |
 | 1.7.1   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
-| 1.8.0   | 06/10/2025 | ***Gabriel*** added task categories and linked them to Firestore.  |
+| 1.8.0   | 06/10/2025 | ***Gabriel*** added role field to users, restricted CRUD by role, and documented security rules in Firestore.  |
 
 ---
 
