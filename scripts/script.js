@@ -1,3 +1,5 @@
+import { db, doc, setDoc } from "./firebase.js";
+
 (function () {
     "use strict";
 
@@ -149,20 +151,29 @@
                     displayName: name
                 });
             })
+            .then(async () => {
+                const user = firebase.auth().currentUser;
+                await setDoc(doc(db, "users", user.uid), {
+                    email: user.email,
+                    name: user.displayName,
+                    role: "user"
+                }, { merge: true });
+            })
             .then(() => {
                 messageElement.textContent = 'Rebelde recrutado com sucesso!';
                 messageElement.classList.remove('text-yellow-500');
                 messageElement.classList.add('text-green-500');
-                
+
                 // Limpar formulário
                 document.getElementById('name').value = '';
                 document.getElementById('newEmail').value = '';
                 document.getElementById('newPassword').value = '';
-                
+
                 setTimeout(() => {
                     showLoginForm();
                 }, 2000);
             })
+
             .catch((error) => {
                 let errorMessage = 'Erro no recrutamento rebelde!';
                 
