@@ -285,7 +285,7 @@ header div{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 20px 90px;
+    padding: 20px 50px;
     text-align: center;
     font-family: "Exo 2", sans-serif;
     font-weight: 600;
@@ -515,6 +515,8 @@ input:-webkit-autofill:active {
         width: 100vw;
         margin-top: 5%;
     }
+
+    .item-lista p{ padding:20px 50px; }
 }
 
 @media (max-width: 850px) and (orientation: landscape) {
@@ -554,5 +556,6 @@ input:-webkit-autofill:active {
         font-size: 13px;
         height: 10px;
     }
-   
+
+    .item-lista p{ padding:20px 80px; }
 }
