@@ -171,7 +171,7 @@ This solution satisfies all the requirements:
 | 1.6.0   | 25/09/2025 | ***Gabriel & Sabrina*** connected the pages to Firestore, enabling login and registration functionality. |
 | 1.7.0   | 26/09/2025 | ***Gabriel*** connected the tasks CRUD system to Firestore.            |
 | 1.7.1   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
-| 1.8.0   | 06/10/2025 | ***Gabriel*** added role field to users, restricted CRUD by role, and documented security rules in Firestore.  |
+| 1.8.0   | 20/10/2025 | ***Gabriel*** added role field to users, restricted CRUD by role, documented security rules in Firestore, and deployed the updates to Firebase Hosting.|
 
 ---
 
