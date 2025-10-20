@@ -195,6 +195,12 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
         imgIndicador.src = tema === 'dark' ? 'images/imperio-icon.png' : 'images/jedi-icon.png';
         imgTema.src = tema === 'dark' ? 'images/vader-icon.png' : 'images/yoda-icon.png';
         localStorage.setItem('tema', tema);
+
+        if (tema === 'dark') {
+            temaBtn.classList.add('tema-ativado');
+        } else {
+            temaBtn.classList.remove('tema-ativado');
+        }
     }
 
     temaBtnContainer.addEventListener('click', () => {
