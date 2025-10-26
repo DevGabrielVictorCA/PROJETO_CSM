@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-:root{
+/* :root{
     --primary-color: #e6e6c5;
     --secondary-color: #442007;
     --highlighted-color: #03bfcc;
@@ -39,7 +39,7 @@
     --matte-color: #A97247;
 }
 
-[data-tema="light"], [data-tema="dark"] { transition: var(--transicao-tema); }
+[data-tema="light"], [data-tema="dark"] { transition: var(--transicao-tema); } */
 
 #img-indicador { transition: opacity 0.3s ease-in-out; }
 .fade-out { opacity: 0; }

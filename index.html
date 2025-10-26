@@ -1,42 +1,70 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-tema="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre - Star Wars To-Do List</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/toggle-tema.css">
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" href="images/millennium-falcon.png" type="image/png" sizes="32x32">
+    <script src="https://kit.fontawesome.com/3bc329aa88.js" crossorigin="anonymous"></script>
 </head>
 <body class="min-h-screen">
+<header>
+    <!-- <div class="toggle-tema-container">
+        <div id="tema-btn">
+            <img src="images/yoda-icon.png" alt="imagem de tema claro/escuro" id="img-tema">
+        </div>
+    </div> -->
+</header>
 <!-- Hero Section com fundo estrelado -->
 <section class="galaxy-bg h-[80vh] flex flex-col items-center justify-center relative" id="hero">
     <!-- As estrelas serão geradas via JavaScript -->
-
+    <div class="toggle-tema-container">
+        <div id="tema-btn">
+            <img src="images/yoda-icon.png" alt="imagem de tema claro/escuro" id="img-tema">
+        </div>
+    </div>
     <div class="text-center z-10 px-4 max-w-4xl py-10">
-        <h1 class="star-wars-font text-5xl md:text-7xl font-bold mb-6 depth-effect mt-20">STAR WARS TO-DO LIST</h1>
+        <h1 class="star-wars-font text-5xl md:text-7xl font-bold mb-6 depth-effect mt-20" style="color: var(--highlighted-color);">STAR WARS TO-DO LIST</h1>
         <p class="text-xl md:text-2xl mb-8 depth-effect">Que a força esteja com suas tarefas diárias</p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
-            <button onclick="openModal('login')" class="lightsaber-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center">
+            <button onclick="openModal('login')" class="lightsaber-btn text-white font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center hover:scale-105" style="background-color: var(--secondary-color); color: var(--primary-color);">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                 </svg>
                 Acessar a Força
             </button>
 
-            <button onclick="openModal('register')" class="lightsaber-btn bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center">
+            <button onclick="openModal('register')" class="lightsaber-btn font-bold py-3 px-8 rounded-lg depth-effect transition duration-300 text-lg flex items-center justify-center hover:scale-105" style="background-color: var(--highlighted-color); color: var(--primary-color);">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 Juntar-se à Rebelião
             </button>
         </div>
+
+        <!-- <div class="btn-container">
+            <button onclick="openModal('login')" class="item-lista">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                Acessar a Força
+            </button>
+
+            <button onclick="openModal('register')" class="item-lista">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Juntar-se à Rebelião
+            </button> -->
     </div>
 
-    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
     </div>
@@ -47,7 +75,7 @@
     <div class="max-w-6xl mx-auto">
         <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">SOBRE O PROJETO</h2>
 
-        <div class="bg-gray-900 bg-opacity-70 rounded-xl p-8 border border-yellow-500 shadow-lg">
+        <div class="bg-opacity-70 rounded-xl p-8 shadow-lg borda card-sobre">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
                     <h3 class="text-2xl font-bold mb-4 depth-effect">Uma Nova Esperança para Sua Produtividade</h3>
@@ -74,38 +102,38 @@
             <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">CURIOSIDADES</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg depth-effect">
-                    <div class="text-yellow-500 mb-4 text-4xl">1</div>
+                <div class="bg-opacity-70 rounded-xl p-6 borda shadow-lg depth-effect card-curiosidade">
+                    <div class="mb-4 text-4xl">1</div>
                     <h3 class="font-bold text-xl mb-2">Inspiração na Força</h3>
                     <p class="text-gray-300">O design do app foi inspirado nos interfaces tecnológicos dos filmes, especialmente os painéis de controle das naves espaciais.</p>
                 </div>
                 
-                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg depth-effect">
-                    <div class="text-yellow-500 mb-4 text-4xl">2</div>
+                <div class="bg-opacity-70 rounded-xl p-6 borda shadow-lg depth-effect card-curiosidade">
+                    <div class="mb-4 text-4xl">2</div>
                     <h3 class="font-bold text-xl mb-2">Efeitos Sonoros Autênticos</h3>
                     <p class="text-gray-300">Cada interação no app é acompanhada por efeitos sonoros extraídos diretamente da trilogia original.</p>
                 </div>
                 
-                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg depth-effect">
-                    <div class="text-yellow-500 mb-4 text-4xl">3</div>
+                <div class="bg-opacity-70 rounded-xl p-6 borda shadow-lg depth-effect card-curiosidade">
+                    <div class="mb-4 text-4xl">3</div>
                     <h3 class="font-bold text-xl mb-2">Missões Especiais (Futura Implementação)</h3>
                     <p class="text-gray-300">Em dias especiais como o Star Wars Day (4 de maio), o app libera missões temáticas com recompensas exclusivas.</p>
                 </div>
                 
-                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg depth-effect">
-                    <div class="text-yellow-500 mb-4 text-4xl">4</div>
+                <div class="bg-opacity-70 rounded-xl p-6 borda shadow-lg depth-effect card-curiosidade">
+                    <div class="mb-4 text-4xl">4</div>
                     <h3 class="font-bold text-xl mb-2">Sabre de Luz de Progresso</h3>
                     <p class="text-gray-300">A barra de progresso de suas tarefas assume a forma de um sabre de luz que cresce conforme você completa atividades.</p>
                 </div>
                 
-                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg depth-effect">
-                    <div class="text-yellow-500 mb-4 text-4xl">5</div>
+                <div class="bg-opacity-70 rounded-xl p-6 borda shadow-lg depth-effect card-curiosidade">
+                    <div class="mb-4 text-4xl">5</div>
                     <h3 class="font-bold text-xl mb-2">Personagens como Guias (Futura Implementação)</h3>
                     <p class="text-gray-300">Você pode escolher personagens como R2-D2, C-3PO ou BB-8 para serem seus assistentes virtuais e guiá-lo nas tarefas.</p>
                 </div>
                 
-                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg depth-effect">
-                    <div class="text-yellow-500 mb-4 text-4xl">6</div>
+                <div class="bg-opacity-70 rounded-xl p-6 borda shadow-lg depth-effect card-curiosidade">
+                    <div class="mb-4 text-4xl">6</div>
                     <h3 class="font-bold text-xl mb-2">Modo Sith</h3>
                     <p class="text-gray-300">Para momentos de produtividade extrema, ative o "Modo Sith" com tema vermelho e alertas mais intensos em um Pomodoro.</p>
                 </div>
@@ -119,129 +147,129 @@
             <h2 class="star-wars-font text-3xl md:text-4xl text-center mb-16 section-title">CONTATO DOS CRIADORES</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="creator-card bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg text-center">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-yellow-500 bg-gray-800 flex items-center justify-center">
-                        <img src="https://avatars.githubusercontent.com/u/172296261?v=4" alt="">
+                <div class="creator-card rounded-xl p-6 shadow-lg text-center card-author">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 bg-gray-800 flex items-center justify-center img-author">
+                        <img src="https://avatars.githubusercontent.com/u/172296261?v=4" alt="author: Gabriel Cardoso">
                     </div>
                     <h3 class="text-xl font-bold mb-2">Gabriel Cardoso</h3>
-                    <p class="text-yellow-500 mb-4">Mestre Jedi do Front</p>
+                    <p style="color: var(--highlighted-color);">Mestre Jedi do Front</p>
                     <p class="text-gray-300 mb-4">Mestre em interfaces que fluem como a Força. Transforma linhas de código em experiências intergalácticas.</p>
                     <div class="flex justify-center space-x-4">
-                        <a href="mailto:gabrielvictorcardosopeace@gmail.com" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="mailto:gabrielvictorcardosopeace@gmail.com" class="transition duration-300 author-links">
                             <span class="sr-only">Email</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
                         </a>
-                        <a href="https://github.com/DevGabrielVictorCA" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://github.com/DevGabrielVictorCA" class="transition duration-300 author-links">
                             <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://www.linkedin.com/in/gabriel-cardoso-133828260/" class="transition duration-300 author-links">
                             <span class="sr-only">LinkedIn</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                         </a>
                     </div>
                 </div>
                 
-                <div class="creator-card bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg text-center">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-yellow-500 bg-gray-800 flex items-center justify-center">
-                        <img src="https://avatars.githubusercontent.com/u/219427440?v=4" alt="">
+                <div class="creator-card bg-opacity-70 rounded-xl p-6 borda shadow-lg text-center card-author">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden borda bg-gray-800 flex items-center justify-center img-author">
+                        <img src="https://avatars.githubusercontent.com/u/219427440?v=4" alt="author: Sabrina Santos">
                     </div>
                     <h3 class="text-xl font-bold mb-2">Sabrina Santos</h3>
-                    <p class="text-yellow-500 mb-4">Lord Sombria do Back</p>
+                    <p style="color: var(--highlighted-color);">Lord Sombria do Back</p>
                     <p class="text-gray-300 mb-4">Comanda os exércitos de APIs em Java e ergue arquiteturas mais sólidas que a Estrela da Morte.</p>
                     <div class="flex justify-center space-x-4">
-                        <a href="mailto:sabrina.oliveira0133@gmail.com" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="mailto:sabrina.oliveira0133@gmail.com" class="transition duration-300 author-links">
                             <span class="sr-only">Email</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
                         </a>
-                        <a href="https://github.com/sabrinafullstack" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://github.com/sabrinafullstack" class="transition duration-300 author-links">
                             <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
                         </a>
-                        <a href="https://www.linkedin.com/in/sabrina-oliveira-937834372/" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://www.linkedin.com/in/sabrina-oliveira-937834372/" class="transition duration-300 author-links">
                             <span class="sr-only">LinkedIn</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                         </a>
                     </div>
                 </div>
                 
-                <div class="creator-card bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg text-center">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-yellow-500 bg-gray-800 flex items-center justify-center">
-                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGOJH8eJDhVKg/profile-displayphoto-shrink_200_200/B4DZTeXrBGHkAY-/0/1738897536387?e=1759363200&v=beta&t=2n9cYcOWKq0Ks6J-JGf9ADv-nOTpqssR5-1GBEC2DHo" alt="">
+                <div class=" bg-opacity-70 rounded-xl p-6 borda shadow-lg text-center card-author">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden borda bg-gray-800 flex items-center justify-center img-author">
+                        <img src="images/jessica-profile.jpg" alt="author: Jéssica Akemy">
                     </div>
                     <h3 class="text-xl font-bold mb-2">Jéssica Akemy</h3>
-                    <p class="text-yellow-500 mb-4">Padawan do Front-end</p>
+                    <p style="color: var(--highlighted-color);">Padawan do Front-end</p>
                     <p class="text-gray-300 mb-4">Aprendiz incansável, equilibrando design e funcionalidade. Uma nova esperança para a galáxia.</p>
                     <div class="flex justify-center space-x-4">
-                        <a href="mailto:jessica.santos2001@cs.unicid.edu.br" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="mailto:jessica.santos2001@cs.unicid.edu.br" class="transition duration-300 author-links">
                             <span class="sr-only">Email</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
                         </a>
-                        <a href="https://github.com/AkemArt" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://github.com/AkemArt" class="transition duration-300 author-links">
                             <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
                         </a>
-                        <a href="https://www.linkedin.com/in/j%C3%A9ssica-akemy-942a99161?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://www.linkedin.com/in/j%C3%A9ssica-akemy-942a99161?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="transition duration-300 author-links">
                             <span class="sr-only">LinkedIn</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                         </a>
                     </div>
                 </div>
 
-                <div class="creator-card bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg text-center">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-yellow-500 bg-gray-800 flex items-center justify-center">
-                        <img src="images/hugo-profile.jpeg" alt="">
+                <div class="creator-card bg-opacity-70 rounded-xl p-6 borda shadow-lg text-center card-author">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden borda bg-gray-800 flex items-center justify-center img-author">
+                        <img src="images/hugo-profile.jpeg" alt="author: Hugo Rocha">
                     </div>
                     <h3 class="text-xl font-bold mb-2">Hugo Rocha</h3>
-                    <p class="text-yellow-500 mb-4">O Chewbacca Mandaloriano</p>
+                    <p style="color: var(--highlighted-color);">O Chewbacca Mandaloriano</p>
                     <p class="text-gray-300 mb-4">Wookiee do código e guardião das fronteiras do desenvolvimento, com força e fidelidade enfrenta bugs implacáveis.</p>
                     <div class="flex justify-center space-x-4">
-                        <a href="mailto:hugorocha.hr67@gmail.com" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="mailto:hugorocha.hr67@gmail.com" class="transition duration-300 author-links">
                             <span class="sr-only">Email</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
                         </a>
-                        <a href="https://github.com/Hugoo15" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://github.com/Hugoo15" class="transition duration-300 author-links">
                             <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
                         </a>
                     </div>
                 </div>
 
-                <div class="creator-card bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg text-center">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-yellow-500 bg-gray-800 flex items-center justify-center">
-                        <img src="images/thomas-profile.jpeg" alt="">
+                <div class="creator-card bg-opacity-70 rounded-xl p-6 borda shadow-lg text-center card-author">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden borda bg-gray-800 flex items-center justify-center img-author">
+                        <img src="images/thomas-profile.jpeg" alt="author: Thomas Oliveira">
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Thomas </h3>
-                    <p class="text-yellow-500 mb-4">Explorador dos Holocrons</p>
+                    <h3 class="text-xl font-bold mb-2">Thomas Oliveira</h3>
+                    <p style="color: var(--highlighted-color);">Explorador dos Holocrons</p>
                     <p class="text-gray-300 mb-4">Viajante e colecionador de histórias da galáxia, desvenda mistérios de código com os segredos dos antigos Holocrons.</p>
                     <div class="flex justify-center space-x-4">
-                        <a href="mailto:thomasodr2@gmail.com" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="mailto:thomasodr2@gmail.com" class="transition duration-300 author-links">
                             <span class="sr-only">Email</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
                         </a>
-                        <a href="https://github.com/SamothAsor" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://github.com/SamothAsor" class="transition duration-300 author-links">
                             <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
                         </a>
                     </div>
                 </div>
 
 
-                <div class="creator-card bg-gray-900 bg-opacity-70 rounded-xl p-6 border border-yellow-500 shadow-lg text-center">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-yellow-500 bg-gray-800 flex items-center justify-center">
-                        <img src="images/maria-nubia-profile.jpeg" alt="">
+                <div class="creator-card bg-opacity-70 rounded-xl p-6 borda shadow-lg text-center card-author">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden borda bg-gray-800 flex items-center justify-center img-author">
+                        <img src="images/maria-nubia-profile.jpeg" alt="author: Maria Núbia">
                     </div>
                     <h3 class="text-xl font-bold mb-2">Maria Núbia</h3>
-                    <p class="text-yellow-500 mb-4">Pilota Master do Hiperespaço</p>
+                    <p style="color: var(--highlighted-color);">Pilota Master do Hiperespaço</p>
                     <p class="text-gray-300 mb-4">Navega entre frameworks e servidores, transportando projetos do papel à produção à velocidade da luz.</p>
                     <div class="flex justify-center space-x-4">
-                        <a href="mailto:nubiafreires1798@gmail.com" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="mailto:nubiafreires1798@gmail.com" class="transition duration-300 author-links">
                             <span class="sr-only">Email</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
                         </a>
-                        <a href="https://github.com/nubia1798" class="text-gray-400 hover:text-yellow-500 transition duration-300">
+                        <a href="https://github.com/nubia1798" class="transition duration-300 author-links">
                             <span class="sr-only">GitHub</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
                         </a>
                     </div>
                 </div>
@@ -251,15 +279,15 @@
 
 <!-- Modal de Login/Registro -->
 <div id="loginModal" class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 hidden">
-    <div class="bg-gray-900 bg-opacity-95 border-2 border-yellow-500 rounded-xl w-full max-w-md p-6 relative">
-        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-yellow-500">
+    <div class="bg-opacity-95 border-2 rounded-xl w-full max-w-md p-6 relative login-form">
+        <button onclick="closeModal()" class="absolute top-4 right-4" id="close-modal-register">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
 
         <div id="loginForm">
-            <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Acesse a Força</h2>
+            <h2 class="star-wars-font text-bold text-2xl md:text-3xl mb-6 text-center" style="color: var(--highlighted-color);">Acesse a Força</h2>
             
             <div id="loginMessage" class="mb-4 text-red-500 text-center hidden"></div>
 
@@ -274,23 +302,23 @@
                     <input type="password" id="password" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
 
-                <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
+                <button type="submit" class="w-full hover:bg-yellow-600 font-bold py-3 px-4 rounded-lg hover:scale-105 transition duration-300" style="background-color: var(--highlighted-color);">
                     Acessar o Império
                 </button>
             </form>
 
-            <p class="text-center text-gray-400 mt-6">
+            <p class="text-center mt-6">
                 Não tem uma conta?
-                <a href="#" onclick="showRegisterForm()" class="text-yellow-500 hover:underline">Junte-se à Rebelião</a>
+                <a href="#" onclick="showRegisterForm()" class="hover:underline" style="color: var(--highlighted-color);">Junte-se à Rebelião</a>
             </p>
             
             <p class="text-center text-gray-400 mt-4">
-                <a href="#" onclick="showRecoveryForm()" class="text-yellow-500 hover:underline">Esqueceu sua senha?</a>
+                <a href="#" onclick="showRecoveryForm()" class="hover:underline" style="color: var(--highlighted-color);">Esqueceu sua senha?</a>
             </p>
         </div>
 
         <div id="registerForm" class="hidden">
-            <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Junte-se à Rebelião</h2>
+            <h2 class="star-wars-font text-2xl md:text-3xl mb-6 text-center" style="color: var(--highlighted-color);">Junte-se à Rebelião</h2>
 
             <div id="registerMessage" class="mb-4 text-red-500 text-center hidden"></div>
 
@@ -310,29 +338,29 @@
                     <input type="password" id="newPassword" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
 
-                <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300">
+                <button type="submit" class="w-full font-bold py-3 px-4 rounded-lg transition duration-300 hover:scale-105" style="background-color: var(--highlighted-color);">
                     Completar Inscrição
                 </button>
             </form>
 
             <p class="text-center text-gray-400 mt-6">
                 Já tem uma conta?
-                <a href="#" onclick="showLoginForm()" class="text-yellow-500 hover:underline">Acesse a Força</a>
+                <a href="#" onclick="showLoginForm()" class="hover:underline" style="color: var(--highlighted-color);">Acesse a Força</a>
             </p>
         </div>
 
         <div id="recoveryForm" class="hidden">
-            <h2 class="star-wars-font text-2xl md:text-3xl text-yellow-500 mb-6 text-center">Recuperar Senha</h2>
+            <h2 class="star-wars-font text-2xl md:text-3xl mb-6 text-center" style="color: var(--highlighted-color);">Recuperar Senha</h2>
 
             <div id="recoveryMessage" class="mb-4 text-center"></div>
 
             <div id="step1">
-                <p class="text-gray-300 mb-4">Informe seu email para iniciar a recuperação de senha:</p>
-                <div class="mb-4">
+                <p class="mb-4" style="color: var(--secondary-color);">Informe seu email para iniciar a recuperação de senha:</p>
+                <div class="mb-4" id="recoveryFormElement">
                     <label for="recoveryEmail" class="block text-gray-300 mb-2">Email Jedi</label>
                     <input type="email" id="recoveryEmail" class="w-full bg-gray-800 border border-yellow-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
                 </div>
-                <button onclick="startRecovery()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition duration-300 mb-4">
+                <button onclick="startRecovery()" class="w-full hover:scale-105 font-bold py-3 px-4 rounded-lg transition duration-300 mb-4" style="background-color: var(--highlighted-color); width: 100;">
                     Enviar Código
                 </button>
             </div>
@@ -353,7 +381,7 @@
             </div>
 
             <p class="text-center text-gray-400 mt-6">
-                <a href="#" onclick="showLoginForm()" class="text-yellow-500 hover:underline">Voltar ao Login</a>
+                <a href="#" onclick="showLoginForm()" class="hover:underline" style="color: var(--highlighted-color);">Voltar ao Login</a>
             </p>
         </div>
     </div>
@@ -370,8 +398,45 @@
     </div>
 </div>
 
-<footer class="py-8 text-center border-t border-yellow-900">
-    <p class="text-gray-500">Que a força esteja com você • 2025 Star Wars To-Do List</p>
+<!-- CONTACT FORM -->
+    <section class="container">
+        <form class="contact-form" id="contact-form">
+            <div class="close-form">x</div>
+            <h2>Entre em Contato Conosco</h2>
+            <label for="name">Nome:</label>
+            <input type="text" id="name" required />
+    
+            <label for="email">Email:</label>
+            <input type="email" id="email" required />
+
+            <label for="assunto">Assunto:</label>
+            <select id="assunto" name="assunto" required>
+                <option value="">Selecione...</option>
+                <option value="duvida-funcionalidades">Dúvidas sobre funcionalidades</option>
+                <option value="problemas-conta">Problemas com login ou conta</option>
+                <option value="sincronizacao">Problemas de sincronização ou dados</option>
+                <option value="sugestoes">Sugestões de melhoria</option>
+                <option value="feedback">Feedback geral</option>
+                <option value="reclamacoes">Reclamações</option>
+                <option value="colaboracoes">Parcerias ou colaborações</option>
+                <option value="outros">Outros</option>
+            </select>
+
+    
+            <label for="message">Mensagem:</label>
+            <textarea id="message" rows="5" required></textarea>
+    
+            <button type="submit">Enviar</button>
+            <p id="feedback"></p>
+        </form>
+    </section>
+    <aside class="lateral-buttons">
+        <div class="open-form"><i class="fa-regular fa-comment"></i></div>
+    </aside>
+
+<footer class="py-8 text-center border-t" style="border-top: 2px solid var(--highlighted-color);">
+    <a href="politicas.html" target="_blank" class="footer-links">Políticas de Privacidade</a>
+    <p class="text-gray-500 py-4">Que a força esteja com você • 2025 Star Wars To-Do List</p>
 </footer>
 <script type="module" src="scripts/script.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -390,6 +455,7 @@
   // Inicializar Firebase
   firebase.initializeApp(firebaseConfig);
 </script>
+<script src="scripts/tema.js"></script>
 <script type="module" src="scripts/firebase.js"></script>
 <script type="module" src="scripts/auth.js"></script>
 </body>
