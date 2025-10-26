@@ -172,6 +172,8 @@ This solution satisfies all the requirements:
 | 1.7.0   | 26/09/2025 | ***Gabriel*** connected the tasks CRUD system to Firestore.            |
 | 1.7.1   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
 | 1.8.0   | 20/10/2025 | ***Gabriel*** added role field to users, restricted CRUD by role, documented security rules in Firestore, and deployed the updates to Firebase Hosting.|
+| 1.9.0   | 20/10/2025 | ***Gabriel*** added a page with the application's privacy policies and a contact form for users to contact the team.|
+
 
 ---
 
