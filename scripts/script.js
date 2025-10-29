@@ -7,6 +7,35 @@ import { db, doc, setDoc } from "./firebase.js";
     let recoveryCode = null;
     let recoveryEmail = null;
 
+    // Inicializar EmailJS
+    emailjs.init("mr8ko0PM9f1zIbVd1");
+
+    // Função para enviar email de boas-vindas
+    async function enviarEmailBoasVindas(nome, email) {
+        try {
+            const templateParams = {
+                name: nome,
+                email: email,
+                to_email: email
+            };
+
+            // Envia o email usando EmailJS
+            const response = await emailjs.send(
+                'service_up82fcd',
+                'template_ihu3n49',
+                templateParams
+            );
+
+            console.log('Email de boas-vindas enviado com sucesso!');
+            return response;
+            
+        } catch (error) {
+            console.error('Erro ao enviar email de boas-vindas:', error);
+            // Não rejeita a promise para não quebrar o fluxo de cadastro
+            return null;
+        }
+    }
+
     // Criar estrelas para o fundo da galáxia
     function createStars() {
         const heroSection = document.getElementById('hero');
@@ -78,7 +107,7 @@ import { db, doc, setDoc } from "./firebase.js";
         }
     });
 
-    // Funções de autenticação com Firebase (versão simplificada)
+    // Funções de autenticação com Firebase
     function handleLogin(event) {
         event.preventDefault();
         
@@ -158,9 +187,17 @@ import { db, doc, setDoc } from "./firebase.js";
                     name: user.displayName,
                     role: "user"
                 }, { merge: true });
+                
+                // ✅ ENVIAR EMAIL DE BOAS-VINDAS
+                return enviarEmailBoasVindas(name, email);
             })
-            .then(() => {
-                messageElement.textContent = 'Rebelde recrutado com sucesso!';
+            .then((emailResponse) => {
+                if (emailResponse) {
+                    messageElement.textContent = 'Rebelde recrutado com sucesso! Email de boas-vindas enviado! 🚀';
+                } else {
+                    messageElement.textContent = 'Rebelde recrutado com sucesso!';
+                }
+                
                 messageElement.classList.remove('text-yellow-500');
                 messageElement.classList.add('text-green-500');
 
@@ -171,9 +208,8 @@ import { db, doc, setDoc } from "./firebase.js";
 
                 setTimeout(() => {
                     showLoginForm();
-                }, 2000);
+                }, 3000);
             })
-
             .catch((error) => {
                 let errorMessage = 'Erro no recrutamento rebelde!';
                 
@@ -265,27 +301,26 @@ import { db, doc, setDoc } from "./firebase.js";
 
     // Formulário de contatos
     document.getElementById("contact-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-  
-    const nome = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const mensagem = document.getElementById("message").value;
-    const feedback = document.getElementById("feedback");
-  
-    if (nome && email && mensagem) {
-      feedback.textContent = "Mensagem enviada com sucesso!";
-      feedback.style.color = "#7cfc00";
-      this.reset();
+        e.preventDefault();
+    
+        const nome = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const mensagem = document.getElementById("message").value;
+        const feedback = document.getElementById("feedback");
+    
+        if (nome && email && mensagem) {
+            feedback.textContent = "Mensagem enviada com sucesso!";
+            feedback.style.color = "#7cfc00";
+            this.reset();
 
-      setTimeout(() => {
-        feedback.textContent = " ";
-      }, 10000);
-
-    } else {
-      feedback.textContent = "Preencha todos os campos.";
-      feedback.style.color = "red";
-    }
-  });
+            setTimeout(() => {
+                feedback.textContent = " ";
+            }, 10000);
+        } else {
+            feedback.textContent = "Preencha todos os campos.";
+            feedback.style.color = "red";
+        }
+    });
 
     // Toggle button para o formulário
     let openForm = document.querySelector(".open-form");
@@ -293,17 +328,16 @@ import { db, doc, setDoc } from "./firebase.js";
     let containerForm = document.querySelector(".container");
 
     openForm.addEventListener('click', ()=>{
-        containerForm.classList.add('form-active')
+        containerForm.classList.add('form-active');
         openForm.style.display = 'none';
         document.body.style.overflow = 'hidden';
-    })
+    });
 
     closeForm.addEventListener('click', ()=>{
-        containerForm.classList.remove('form-active')
+        containerForm.classList.remove('form-active');
         openForm.style.display = 'flex';
         document.body.style.overflowY = 'scroll';
-    })
-
+    });
 
     // Expor funções para o escopo global
     window.openModal = openModal;
