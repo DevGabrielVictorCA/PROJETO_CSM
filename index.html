@@ -400,14 +400,15 @@
 
 <!-- CONTACT FORM -->
     <section class="container">
-        <form class="contact-form" id="contact-form">
+        <form class="contact-form" id="contact-form"> <!-- action="https://formspree.io/f/xldonlge" method="POST" -->
             <div class="close-form">x</div>
             <h2>Entre em Contato Conosco</h2>
+
             <label for="name">Nome:</label>
-            <input type="text" id="name" required />
-    
+            <input type="text" id="name" name="name" required />
+
             <label for="email">Email:</label>
-            <input type="email" id="email" required />
+            <input type="email" id="email" name="email" required />
 
             <label for="assunto">Assunto:</label>
             <select id="assunto" name="assunto" required>
@@ -422,14 +423,14 @@
                 <option value="outros">Outros</option>
             </select>
 
-    
             <label for="message">Mensagem:</label>
-            <textarea id="message" rows="5" required></textarea>
-    
+            <textarea id="message" name="message" rows="5" required></textarea>
+
             <button type="submit">Enviar</button>
             <p id="feedback"></p>
         </form>
     </section>
+
     <aside class="lateral-buttons">
         <div class="open-form"><i class="fa-regular fa-comment"></i></div>
     </aside>

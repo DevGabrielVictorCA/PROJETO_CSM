@@ -262,6 +262,8 @@ import { db, doc, setDoc } from "./firebase.js";
         });
     });
 
+
+    // Formulário de contatos
     document.getElementById("contact-form").addEventListener("submit", function(e) {
     e.preventDefault();
   
