@@ -1,3 +1,4 @@
+// scripts/script.js
 import { db, doc, setDoc } from "./firebase.js";
 
 (function () {
@@ -7,31 +8,37 @@ import { db, doc, setDoc } from "./firebase.js";
     let recoveryCode = null;
     let recoveryEmail = null;
 
-    // Inicializar EmailJS
-    emailjs.init("mr8ko0PM9f1zIbVd1");
-
     // Função para enviar email de boas-vindas
     async function enviarEmailBoasVindas(nome, email) {
         try {
+            console.log('Tentando enviar email para:', email);
+            
             const templateParams = {
                 name: nome,
                 email: email,
                 to_email: email
             };
 
+            // Verifica se EmailJS está carregado
+            if (typeof emailjs === 'undefined') {
+                console.error('EmailJS não está carregado');
+                return null;
+            }
+
             // Envia o email usando EmailJS
             const response = await emailjs.send(
-                'service_up82fcd',
-                'template_ihu3n49',
+                'service_up82fcd', // Service ID
+                'template_ihu3n49', // Template ID
                 templateParams
             );
 
-            console.log('Email de boas-vindas enviado com sucesso!');
+            console.log('Email de boas-vindas enviado com sucesso!', response);
             return response;
             
         } catch (error) {
-            console.error('Erro ao enviar email de boas-vindas:', error);
-            // Não rejeita a promise para não quebrar o fluxo de cadastro
+            console.error('Erro detalhado ao enviar email:', error);
+            console.log('Código do erro:', error.code);
+            console.log('Mensagem:', error.text);
             return null;
         }
     }
@@ -81,6 +88,10 @@ import { db, doc, setDoc } from "./firebase.js";
         document.getElementById('registerForm').classList.add('hidden');
         document.getElementById('recoveryForm').classList.add('hidden');
         document.getElementById('loginMessage').classList.add('hidden');
+        
+        // Limpar campos
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
     }
 
     function showRegisterForm() {
@@ -88,6 +99,11 @@ import { db, doc, setDoc } from "./firebase.js";
         document.getElementById('registerForm').classList.remove('hidden');
         document.getElementById('recoveryForm').classList.add('hidden');
         document.getElementById('registerMessage').classList.add('hidden');
+        
+        // Limpar campos
+        document.getElementById('name').value = '';
+        document.getElementById('newEmail').value = '';
+        document.getElementById('newPassword').value = '';
     }
 
     function showRecoveryForm() {
@@ -98,6 +114,11 @@ import { db, doc, setDoc } from "./firebase.js";
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('recoveryMessage').textContent = '';
         document.getElementById('recoveryMessage').classList.remove('text-red-500', 'text-green-500');
+        
+        // Limpar campos
+        document.getElementById('recoveryEmail').value = '';
+        document.getElementById('recoveryCode').value = '';
+        document.getElementById('newPasswordRecovery').value = '';
     }
 
     // Fechar modal ao clicar fora dele
@@ -185,17 +206,18 @@ import { db, doc, setDoc } from "./firebase.js";
                 await setDoc(doc(db, "users", user.uid), {
                     email: user.email,
                     name: user.displayName,
-                    role: "user"
+                    role: "user",
+                    dataCriacao: new Date().toISOString()
                 }, { merge: true });
                 
                 // ✅ ENVIAR EMAIL DE BOAS-VINDAS
                 return enviarEmailBoasVindas(name, email);
             })
             .then((emailResponse) => {
-                if (emailResponse) {
+                if (emailResponse && emailResponse.status === 200) {
                     messageElement.textContent = 'Rebelde recrutado com sucesso! Email de boas-vindas enviado! 🚀';
                 } else {
-                    messageElement.textContent = 'Rebelde recrutado com sucesso!';
+                    messageElement.textContent = 'Rebelde recrutado com sucesso! (Email não enviado)';
                 }
                 
                 messageElement.classList.remove('text-yellow-500');
@@ -241,6 +263,13 @@ import { db, doc, setDoc } from "./firebase.js";
         const email = document.getElementById('recoveryEmail').value;
         const messageElement = document.getElementById('recoveryMessage');
         
+        if (!email) {
+            messageElement.textContent = 'Por favor, informe seu email Jedi.';
+            messageElement.classList.remove('text-green-500');
+            messageElement.classList.add('text-red-500');
+            return;
+        }
+        
         messageElement.textContent = 'Enviando mensagem holográfica...';
         messageElement.classList.remove('text-red-500', 'text-green-500');
         messageElement.classList.add('text-yellow-500');
@@ -275,20 +304,89 @@ import { db, doc, setDoc } from "./firebase.js";
             });
     }
 
+    // Função para verificar código de recuperação (placeholder)
+    function verifyRecoveryCode() {
+        const messageElement = document.getElementById('recoveryMessage');
+        messageElement.textContent = 'Funcionalidade de verificação de código em desenvolvimento.';
+        messageElement.classList.remove('text-green-500');
+        messageElement.classList.add('text-yellow-500');
+    }
+
     // Verificar se usuário já está logado ao carregar a página
     function checkAuthState() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 // Usuário já está logado, redirecionar diretamente
+                console.log('Usuário já logado, redirecionando...');
                 window.location.href = 'lista.html';
+            } else {
+                console.log('Usuário não logado, permanecendo na página inicial.');
             }
         });
     }
 
+    // Função para esconder tela de boas-vindas
+    function hideWelcomeScreen() {
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        if (welcomeScreen) {
+            welcomeScreen.classList.add('hidden');
+        }
+    }
+
+    // Configuração do formulário de contato
+    function setupContactForm() {
+        const contactForm = document.getElementById("contact-form");
+        if (!contactForm) return;
+
+        contactForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+        
+            const nome = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const mensagem = document.getElementById("message").value;
+            const feedback = document.getElementById("feedback");
+        
+            if (nome && email && mensagem) {
+                feedback.textContent = "Mensagem enviada com sucesso!";
+                feedback.style.color = "#7cfc00";
+                this.reset();
+
+                setTimeout(() => {
+                    feedback.textContent = " ";
+                }, 10000);
+            } else {
+                feedback.textContent = "Preencha todos os campos.";
+                feedback.style.color = "red";
+            }
+        });
+
+        // Toggle button para o formulário
+        let openForm = document.querySelector(".open-form");
+        let closeForm = document.querySelector(".close-form");
+        let containerForm = document.querySelector(".container");
+
+        if (openForm && closeForm && containerForm) {
+            openForm.addEventListener('click', ()=>{
+                containerForm.classList.add('form-active');
+                openForm.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeForm.addEventListener('click', ()=>{
+                containerForm.classList.remove('form-active');
+                openForm.style.display = 'flex';
+                document.body.style.overflowY = 'scroll';
+            });
+        }
+    }
+
     // Inicializar quando a página carregar
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM carregado, inicializando aplicação...');
+        
         createStars();
         checkAuthState();
+        setupContactForm();
 
         // Adicionar efeito de profundidade
         document.querySelectorAll('.depth-effect').forEach(element => {
@@ -296,46 +394,34 @@ import { db, doc, setDoc } from "./firebase.js";
                 this.style.transition = 'all 0.3s ease';
             });
         });
-    });
 
-    document.getElementById("contact-form").addEventListener("submit", function(e) {
-        e.preventDefault();
-    
-        const nome = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const mensagem = document.getElementById("message").value;
-        const feedback = document.getElementById("feedback");
-    
-        if (nome && email && mensagem) {
-            feedback.textContent = "Mensagem enviada com sucesso!";
-            feedback.style.color = "#7cfc00";
-            this.reset();
-
-            setTimeout(() => {
-                feedback.textContent = " ";
-            }, 10000);
+        // Debug: testar EmailJS
+        console.log('EmailJS disponível:', typeof emailjs !== 'undefined');
+        if (typeof emailjs !== 'undefined') {
+            console.log('EmailJS inicializado com sucesso');
         } else {
-            feedback.textContent = "Preencha todos os campos.";
-            feedback.style.color = "red";
+            console.error('EmailJS não carregado');
         }
     });
 
-    // Toggle button para o formulário
-    let openForm = document.querySelector(".open-form");
-    let closeForm = document.querySelector(".close-form");
-    let containerForm = document.querySelector(".container");
-
-    openForm.addEventListener('click', ()=>{
-        containerForm.classList.add('form-active');
-        openForm.style.display = 'none';
-        document.body.style.overflow = 'hidden';
-    });
-
-    closeForm.addEventListener('click', ()=>{
-        containerForm.classList.remove('form-active');
-        openForm.style.display = 'flex';
-        document.body.style.overflowY = 'scroll';
-    });
+    // Teste manual da função (para debug)
+    window.testarEmail = function() {
+        const testEmail = prompt('Digite um email para teste:');
+        if (testEmail) {
+            enviarEmailBoasVindas('Usuário Teste', testEmail)
+                .then(result => {
+                    if (result && result.status === 200) {
+                        alert('Email de teste enviado com sucesso!');
+                    } else {
+                        alert('Email de teste não enviado. Verifique o console.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro no teste:', error);
+                    alert('Erro ao enviar email de teste. Verifique o console.');
+                });
+        }
+    };
 
     // Expor funções para o escopo global
     window.openModal = openModal;
@@ -346,4 +432,6 @@ import { db, doc, setDoc } from "./firebase.js";
     window.handleLogin = handleLogin;
     window.handleRegister = handleRegister;
     window.startRecovery = startRecovery;
+    window.verifyRecoveryCode = verifyRecoveryCode;
+    window.hideWelcomeScreen = hideWelcomeScreen;
 })();

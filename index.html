@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" href="images/millennium-falcon.png" type="image/png" sizes="32x32">
     <script src="https://kit.fontawesome.com/3bc329aa88.js" crossorigin="anonymous"></script>
+    
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body class="min-h-screen">
 <header>
@@ -438,33 +441,39 @@
     <a href="politicas.html" target="_blank" class="footer-links">Políticas de Privacidade</a>
     <p class="text-gray-500 py-4">Que a força esteja com você • 2025 Star Wars To-Do List</p>
 </footer>
+
+<!-- Scripts na ORDEM CORRETA -->
+<script>
+    // Inicializar EmailJS
+    document.addEventListener('DOMContentLoaded', function() {
+        emailjs.init("mr8ko0PM9f1zIbVd1");
+        console.log('EmailJS inicializado');
+    });
+</script>
+
 <script type="module" src="scripts/script.js"></script>
+
+<!-- Firebase v8 (compatibilidade) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script>
-  // Configuração do Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAAse8fcxMntSDgI4ssrKVcuS14TIcxqYo",
-    authDomain: "star-wars-list-b450b.firebaseapp.com",
-    projectId: "star-wars-list-b450b",
-    storageBucket: "star-wars-list-b450b.firebasestorage.app",
-    messagingSenderId: "1078874247193",
-    appId: "1:1078874247193:web:5ab3e99fcf561140dcda88"
-  };
-
-  // Inicializar Firebase
-  firebase.initializeApp(firebaseConfig);
+    // Configuração do Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAAse8fcxMntSDgI4ssrKVcuS14TIcxqYo",
+        authDomain: "star-wars-list-b450b.firebaseapp.com",
+        projectId: "star-wars-list-b450b",
+        storageBucket: "star-wars-list-b450b.firebasestorage.app",
+        messagingSenderId: "1078874247193",
+        appId: "1:1078874247193:web:5ab3e99fcf561140dcda88"
+    };
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
 </script>
+
+<!-- Outros scripts -->
 <script src="scripts/tema.js"></script>
 <script type="module" src="scripts/firebase.js"></script>
 <script type="module" src="scripts/auth.js"></script>
-
-// script do EmailJS
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
-<script>
-    emailjs.init("mr8ko0PM9f1zIbVd1");
-</script>
 
 </body>
 </html>
