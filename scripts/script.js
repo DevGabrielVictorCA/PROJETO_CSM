@@ -28,7 +28,7 @@ import { db, doc, setDoc } from "./firebase.js";
             // Envia o email usando EmailJS
             const response = await emailjs.send(
                 'service_up82fcd', // Service ID
-                'template_ihu3n49', // Template ID
+                'template_jiu3n49', // Template ID
                 templateParams
             );
 
