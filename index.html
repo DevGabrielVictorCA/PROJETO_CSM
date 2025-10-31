@@ -283,11 +283,11 @@
             <form id="loginFormElement" onsubmit="handleLogin(event)">
                 <div class="mb-4">
                     <label for="email" class="block mb-2" style="color: var(--secondary-color);">Seu Email Jedi</label>
-                    <input type="email" id="email" required>
+                    <input type="email" id="email" class="px-4 py-1" required>
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block mb-2" style="color: var(--secondary-color);">Senha Secreta</label>
-                    <input type="password" id="password" required>
+                    <input type="password" id="password" class="px-4 py-1" required>
                 </div>
                 <button type="submit" style="width:100%; background-color: var(--highlighted-color); color: #fff; padding: 12px; border-radius: 12px;" class="entrar">
                     Acessar o Império
@@ -312,15 +312,15 @@
             <form id="registerFormElement" onsubmit="handleRegister(event)">
                 <div class="mb-4">
                     <label for="name" class="block mb-2" style="color: var(--secondary-color);">Seu Nome Jedi</label>
-                    <input type="text" id="name" required>
+                    <input type="text" id="name" class="px-4 py-1" required>
                 </div>
                 <div class="mb-4">
                     <label for="newEmail" class="block mb-2" style="color: var(--secondary-color);">Email da Força</label>
-                    <input type="email" id="newEmail" required>
+                    <input type="email" id="newEmail" class="px-4" required>
                 </div>
                 <div class="mb-6">
                     <label for="newPassword" class="block mb-2" style="color: var(--secondary-color);">Crie uma Senha Jedi</label>
-                    <input type="password" id="newPassword" required>
+                    <input type="password" id="newPassword" class="px-4 py-1" required>
                 </div>
                 <button type="submit" style="width:100%; background-color: var(--highlighted-color); color: #fff; padding: 12px; border-radius: 12px;" class="entrar">
                     Completar Inscrição
@@ -342,7 +342,7 @@
                 <p class="mb-4 text-center" style="color: var(--secondary-color);">Informe seu email para iniciar a recuperação de senha:</p>
                 <div class="mb-4">
                     <label for="recoveryEmail" class="block mb-2" style="color: var(--secondary-color);">Email Jedi</label>
-                    <input type="email" id="recoveryEmail" required>
+                    <input type="email" id="recoveryEmail" class="px-4 py-1" required>
                 </div>
                 <button onclick="startRecovery()" style="width:100%; background-color: var(--highlighted-color); color:#fff; padding:12px; border-radius:12px;" class="entrar">
                     Enviar Código
@@ -357,7 +357,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="newPasswordRecovery" class="block mb-2" style="color: var(--secondary-color);">Nova Senha</label>
-                    <input type="password" id="newPasswordRecovery" required>
+                    <input type="password" id="newPasswordRecovery" class="px-4 py-1" required>
                 </div>
                 <button onclick="verifyRecoveryCode()" style="width:100%; background-color: var(--highlighted-color); color:#000; padding:12px; border-radius:12px;">
                     Redefinir Senha
@@ -389,13 +389,13 @@
             <div class="close-form"><i class="fa-solid fa-xmark"></i></div>
             <h2>Entre em Contato Conosco</h2>
             <label for="name">Nome:</label>
-            <input type="text" id="name" required />
+            <input type="text" id="name" class="px-3 py-1" required />
     
             <label for="email">Email:</label>
-            <input type="email" id="email" required />
+            <input type="email" id="email" class="px-3 py-1" required />
 
             <label for="assunto">Assunto:</label>
-            <select id="assunto" name="assunto" required>
+            <select id="assunto" name="assunto" class="px-3 py-1" required>
                 <option value="">Selecione...</option>
                 <option value="duvida-funcionalidades">Dúvidas sobre funcionalidades</option>
                 <option value="problemas-conta">Problemas com login ou conta</option>
@@ -409,7 +409,7 @@
 
     
             <label for="message">Mensagem:</label>
-            <textarea id="message" rows="5" required></textarea>
+            <textarea id="message" rows="5" class="px-3 py-1" required></textarea>
     
             <button type="submit" class="enviar-email">Enviar</button>
             <p id="feedback"></p>
