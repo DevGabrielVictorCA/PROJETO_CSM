@@ -14,6 +14,7 @@
         <div class="perfil-usuario logout-btn" onclick="logout()">
             <i class="fa-solid fa-right-from-bracket"></i>
         </div>
+        <button id="pausar-musica">Pausar Música</button>
         <div class="toggle-tema-container">
             <div id="tema-btn">
                 <img src="images/yoda-icon.png" alt="imagem de tema claro/escuro" id="img-tema">
@@ -32,7 +33,7 @@
                 </svg>
                 <h1>Lista de Tarefas</h1>
             </div>
-            <i class="add-item fa-solid fa-plus"></i>
+            <i class="add-item fa-solid fa-plus add-tarefa"></i>
         </article>
         <div class="lista-container">
             <ul class="listaDeTarefas"></ul>
@@ -54,8 +55,9 @@
             <button class="cancelar-btn" data-function='cancelar-btn'>Cancelar</button>
         </div>
     </form>
+    <script src="scripts/tema.js"></script>
+    <script src="scripts/audio-tema.js"></script>
     <script type="module" src="scripts/lista.js"></script>
     <script type="module" src="scripts/auth.js"></script>
-    <script src="scripts/tema.js"></script>
 </body>
 </html>

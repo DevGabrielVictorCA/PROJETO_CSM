@@ -298,8 +298,7 @@ import { db, doc, setDoc } from "./firebase.js";
         });
     });
 
-
-    // Formulário de contatos
+    // Formulario de contatos
     document.getElementById("contact-form").addEventListener("submit", function(e) {
         e.preventDefault();
     
@@ -325,17 +324,17 @@ import { db, doc, setDoc } from "./firebase.js";
     // Toggle button para o formulário
     let openForm = document.querySelector(".open-form");
     let closeForm = document.querySelector(".close-form");
-    let containerForm = document.querySelector(".container");
+    let containerForm = document.querySelector(".contact-container");
 
     openForm.addEventListener('click', ()=>{
         containerForm.classList.add('form-active');
-        openForm.style.display = 'none';
+        openForm.style.visibility = 'hidden';
         document.body.style.overflow = 'hidden';
     });
 
     closeForm.addEventListener('click', ()=>{
         containerForm.classList.remove('form-active');
-        openForm.style.display = 'flex';
+        openForm.style.visibility = 'visible';
         document.body.style.overflowY = 'scroll';
     });
 

@@ -1,4 +1,3 @@
-// scripts/lista.js
 import tarefasService from './tarefas-service.js';
 import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from './firebase.js';
 
@@ -13,11 +12,6 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
     const formItem = document.getElementById('form-item');
     const listaTarefas = document.querySelector('.listaDeTarefas');
     const editarOuSalvar = document.getElementById('editar-salvar');
-    const temaBtnContainer = document.querySelector('.toggle-tema-container');
-    const temaBtn = document.getElementById('tema-btn');
-    const imgIndicador = document.getElementById('img-indicador');
-    const imgTema = document.getElementById('img-tema');
-    const temaSalvo = localStorage.getItem('tema');
     const categoriaSelect = document.getElementById('categoriaSelect');
 
     let tarefaEditandoId = null;
@@ -34,28 +28,22 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
             dataCriacao: Date.now(),
             completo: false
         };
-        try { 
-            await tarefasService.adicionarTarefa(tarefaExemplo); 
-        } catch (error) { 
-            console.error(error); 
-        }
+        try { await tarefasService.adicionarTarefa(tarefaExemplo); } 
+        catch (error) { console.error(error); }
     }
 
     async function carregarCategorias() {
-        categoriaSelect.innerHTML = `<option value="">Selecione uma categoria</option>`; // reset
-
+        categoriaSelect.innerHTML = `<option value="">Selecione uma categoria</option>`;
         const categoriasSnapshot = await getDocs(collection(db, 'categorias'));
         categoriasSnapshot.forEach(categoriaDoc => {
             const data = categoriaDoc.data();
             const option = document.createElement('option');
-            option.value = categoriaDoc.id;       
-            option.textContent = data.nome;      
+            option.value = categoriaDoc.id;
+            option.textContent = data.nome;
             categoriaSelect.appendChild(option);
         });
 
-        categoriaSelect.addEventListener('change', () => {
-            categoriaSelect.blur(); // remove o foco ao selecionar uma opção
-        });
+        categoriaSelect.addEventListener('change', () => categoriaSelect.blur());
     }
 
     async function gerarTarefaLi(obj) {
@@ -187,31 +175,6 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
     }
 
     // -------------------------
-    // Tema
-    // -------------------------
-
-    function aplicarTema(tema) {
-        document.documentElement.setAttribute('data-tema', tema);
-        imgIndicador.src = tema === 'dark' ? 'images/imperio-icon.png' : 'images/jedi-icon.png';
-        imgTema.src = tema === 'dark' ? 'images/vader-icon.png' : 'images/yoda-icon.png';
-        localStorage.setItem('tema', tema);
-
-        if (tema === 'dark') {
-            temaBtn.classList.add('tema-ativado');
-        } else {
-            temaBtn.classList.remove('tema-ativado');
-        }
-    }
-
-    temaBtnContainer.addEventListener('click', () => {
-        const temaAtual = document.documentElement.getAttribute('data-tema');
-        aplicarTema(temaAtual === 'light' ? 'dark' : 'light');
-    });
-
-    if (temaSalvo) aplicarTema(temaSalvo);
-    else aplicarTema(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-
-    // -------------------------
     // Inicialização com autenticação
     // -------------------------
 
@@ -226,4 +189,5 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
         });
     });
 
+    // localStorage.clear()
 })();

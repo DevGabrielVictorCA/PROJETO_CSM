@@ -2,9 +2,9 @@
 (function() {
     const temaSalvo = localStorage.getItem('tema');
     const root = document.documentElement;
-    const temaBtn = document.getElementById('tema-btn'); // botão opcional
-    const imgIndicador = document.getElementById('img-indicador'); // opcional
-    const imgTema = document.getElementById('img-tema'); // opcional
+    const temaBtn = document.getElementById('tema-btn'); 
+    const imgIndicador = document.getElementById('img-indicador'); 
+    const imgTema = document.getElementById('img-tema'); 
 
     function aplicarTema(tema) {
         root.setAttribute('data-tema', tema);
@@ -21,11 +21,9 @@
         }
     }
 
-    // Aplica tema inicial
     if (temaSalvo) aplicarTema(temaSalvo);
     else aplicarTema(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-    // Ativa alternância apenas se houver botão
     if (temaBtn) {
         temaBtn.addEventListener('click', () => {
             const temaAtual = root.getAttribute('data-tema');
