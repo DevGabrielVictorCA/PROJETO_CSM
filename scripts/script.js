@@ -340,19 +340,19 @@ import { db, doc, setDoc } from "./firebase.js";
 
         contactForm.addEventListener("submit", function(e) {
             e.preventDefault();
-        
+
             const nome = document.getElementById("name").value;
             const email = document.getElementById("email").value;
             const mensagem = document.getElementById("message").value;
             const feedback = document.getElementById("feedback");
-        
+
             if (nome && email && mensagem) {
                 feedback.textContent = "Mensagem enviada com sucesso!";
                 feedback.style.color = "#7cfc00";
                 this.reset();
 
                 setTimeout(() => {
-                    feedback.textContent = " ";
+                    feedback.textContent = "";
                 }, 10000);
             } else {
                 feedback.textContent = "Preencha todos os campos.";
@@ -360,25 +360,41 @@ import { db, doc, setDoc } from "./firebase.js";
             }
         });
 
-        // Toggle button para o formulário
-        let openForm = document.querySelector(".open-form");
-        let closeForm = document.querySelector(".close-form");
-        let containerForm = document.querySelector(".container");
+        const openForm = document.querySelector(".open-form");
+        const closeForm = document.querySelector(".close-form");
+        const containerForm = document.querySelector(".contact-container");
 
         if (openForm && closeForm && containerForm) {
-            openForm.addEventListener('click', ()=>{
-                containerForm.classList.add('form-active');
-                openForm.style.display = 'none';
-                document.body.style.overflow = 'hidden';
+            openForm.addEventListener("click", () => {
+                containerForm.classList.add("form-active");
+                openForm.style.display = "none";
+                document.body.style.overflow = "hidden";
             });
 
-            closeForm.addEventListener('click', ()=>{
-                containerForm.classList.remove('form-active');
-                openForm.style.display = 'flex';
-                document.body.style.overflowY = 'scroll';
+            closeForm.addEventListener("click", () => {
+                fecharFormulario();
             });
+
+            document.addEventListener("click", (event) => {
+                const isActive = containerForm.classList.contains("form-active");
+
+                if (
+                    isActive &&
+                    !contactForm.contains(event.target) &&
+                    !openForm.contains(event.target)
+                ) {
+                    fecharFormulario();
+                }
+            });
+
+            function fecharFormulario() {
+                containerForm.classList.remove("form-active");
+                openForm.style.display = "flex";
+                document.body.style.overflowY = "scroll";
+            }
         }
     }
+
 
     // Inicializar quando a página carregar
     document.addEventListener('DOMContentLoaded', function() {

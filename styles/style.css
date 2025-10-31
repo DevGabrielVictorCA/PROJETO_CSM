@@ -289,14 +289,15 @@ input:-webkit-autofill:active {
 
 .close-form{
     position: absolute;
-    top: -5px;
-    right: 20px;
+    top: 2%;
+    right: 2.5%;
     background: transparent;
     border: none;
     cursor: pointer;
     font-size: 35px;
     color: var(--secondary-color);
     transition: all .3s ease-in-out;
+    font-size: 1.3em;
 }
 
 .close-form:hover{ 
@@ -304,6 +305,8 @@ input:-webkit-autofill:active {
     color: var(--highlighted-color); 
     text-shadow: 0 3px 7px var(--highlighted-color);
 }
+
+/* .close-form i{} */
 
 .btn-container{
     display: flex;
