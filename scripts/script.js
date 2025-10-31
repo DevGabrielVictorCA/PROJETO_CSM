@@ -8,33 +8,27 @@ import { db, doc, setDoc } from "./firebase.js";
     let recoveryCode = null;
     let recoveryEmail = null;
 
-    // Função para enviar email de boas-vindas
+    // Enviar email de boas-vindas
     async function enviarEmailBoasVindas(nome, email) {
         try {
             console.log('Tentando enviar email para:', email);
-            
-            const templateParams = {
-                name: nome,
-                email: email,
-                to_email: email
-            };
 
-            // Verifica se EmailJS está carregado
+            const templateParams = { name: nome, email, to_email: email };
+
             if (typeof emailjs === 'undefined') {
                 console.error('EmailJS não está carregado');
                 return null;
             }
 
-            // Envia o email usando EmailJS
             const response = await emailjs.send(
-                'service_up82fcd', // Service ID
-                'template_jiu3n49', // Template ID
+                'service_up82fcd',
+                'template_jiu3n49',
                 templateParams
             );
 
             console.log('Email de boas-vindas enviado com sucesso!', response);
             return response;
-            
+
         } catch (error) {
             console.error('Erro detalhado ao enviar email:', error);
             console.log('Código do erro:', error.code);
@@ -43,7 +37,7 @@ import { db, doc, setDoc } from "./firebase.js";
         }
     }
 
-    // Criar estrelas para o fundo da galáxia
+    // Criar estrelas para fundo da galáxia
     function createStars() {
         const heroSection = document.getElementById('hero');
         const starsCount = 200;
@@ -64,23 +58,18 @@ import { db, doc, setDoc } from "./firebase.js";
         }
     }
 
-    // Funções para o modal de login/registro
+    // Modal
     function openModal(type) {
         const modal = document.getElementById('loginModal');
         modal.classList.remove('hidden');
 
-        if (type === 'register') {
-            showRegisterForm();
-        } else if (type === 'recovery') {
-            showRecoveryForm();
-        } else {
-            showLoginForm();
-        }
+        if (type === 'register') showRegisterForm();
+        else if (type === 'recovery') showRecoveryForm();
+        else showLoginForm();
     }
 
     function closeModal() {
-        const modal = document.getElementById('loginModal');
-        modal.classList.add('hidden');
+        document.getElementById('loginModal').classList.add('hidden');
     }
 
     function showLoginForm() {
@@ -88,8 +77,7 @@ import { db, doc, setDoc } from "./firebase.js";
         document.getElementById('registerForm').classList.add('hidden');
         document.getElementById('recoveryForm').classList.add('hidden');
         document.getElementById('loginMessage').classList.add('hidden');
-        
-        // Limpar campos
+
         document.getElementById('email').value = '';
         document.getElementById('password').value = '';
     }
@@ -99,8 +87,7 @@ import { db, doc, setDoc } from "./firebase.js";
         document.getElementById('registerForm').classList.remove('hidden');
         document.getElementById('recoveryForm').classList.add('hidden');
         document.getElementById('registerMessage').classList.add('hidden');
-        
-        // Limpar campos
+
         document.getElementById('name').value = '';
         document.getElementById('newEmail').value = '';
         document.getElementById('newPassword').value = '';
@@ -112,95 +99,71 @@ import { db, doc, setDoc } from "./firebase.js";
         document.getElementById('recoveryForm').classList.remove('hidden');
         document.getElementById('step1').classList.remove('hidden');
         document.getElementById('step2').classList.add('hidden');
-        document.getElementById('recoveryMessage').textContent = '';
-        document.getElementById('recoveryMessage').classList.remove('text-red-500', 'text-green-500');
-        
-        // Limpar campos
+
+        const messageElement = document.getElementById('recoveryMessage');
+        messageElement.textContent = '';
+        messageElement.classList.remove('text-error', 'text-highlight', 'text-warning');
+
         document.getElementById('recoveryEmail').value = '';
         document.getElementById('recoveryCode').value = '';
         document.getElementById('newPasswordRecovery').value = '';
     }
 
-    // Fechar modal ao clicar fora dele
+    // Fechar modal clicando fora
     document.getElementById('loginModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
+        if (e.target === this) closeModal();
     });
 
-    // Funções de autenticação com Firebase
+    // Funções de autenticação
     function handleLogin(event) {
         event.preventDefault();
-        
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const messageElement = document.getElementById('loginMessage');
-        
+
         messageElement.textContent = 'Conectando à Força...';
-        messageElement.classList.remove('hidden', 'text-red-500');
-        messageElement.classList.add('text-yellow-500');
-        
+        messageElement.classList.remove('hidden', 'text-error', 'text-highlight');
+        messageElement.classList.add('text-warning');
+
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                // Login bem-sucedido
                 messageElement.textContent = 'Conexão com a Força estabelecida!';
-                messageElement.classList.remove('text-yellow-500');
-                messageElement.classList.add('text-green-500');
-                
+                messageElement.classList.remove('text-warning');
+                messageElement.classList.add('text-highlight');
+
                 setTimeout(() => {
                     closeModal();
                     window.location.href = 'lista.html';
                 }, 1000);
             })
             .catch((error) => {
-                // Tratar erros
                 let errorMessage = 'Erro ao conectar com a Força!';
-                
                 switch (error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'Email Jedi inválido!';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage = 'Este usuário Jedi foi desativado!';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'Jedi não encontrado nos registros!';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'Senha secreta incorreta!';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'Muitas tentativas. Tente novamente mais tarde!';
-                        break;
-                    default:
-                        errorMessage = 'Falha na conexão com a Força!';
+                    case 'auth/invalid-email': errorMessage = 'Email Jedi inválido!'; break;
+                    case 'auth/user-disabled': errorMessage = 'Este usuário Jedi foi desativado!'; break;
+                    case 'auth/user-not-found': errorMessage = 'Jedi não encontrado nos registros!'; break;
+                    case 'auth/wrong-password': errorMessage = 'Senha secreta incorreta!'; break;
+                    case 'auth/too-many-requests': errorMessage = 'Muitas tentativas. Tente novamente mais tarde!'; break;
                 }
-                
                 messageElement.textContent = errorMessage;
-                messageElement.classList.remove('text-yellow-500', 'text-green-500');
-                messageElement.classList.add('text-red-500');
+                messageElement.classList.remove('text-warning', 'text-highlight');
+                messageElement.classList.add('text-error');
             });
     }
 
     function handleRegister(event) {
         event.preventDefault();
-        
         const name = document.getElementById('name').value;
         const email = document.getElementById('newEmail').value;
         const password = document.getElementById('newPassword').value;
         const messageElement = document.getElementById('registerMessage');
-        
+
         messageElement.textContent = 'Recrutando para a Rebelião...';
-        messageElement.classList.remove('hidden', 'text-red-500');
-        messageElement.classList.add('text-yellow-500');
-        
+        messageElement.classList.remove('hidden', 'text-error', 'text-highlight');
+        messageElement.classList.add('text-warning');
+
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                // Cadastro bem-sucedido - atualizar nome do usuário
-                return userCredential.user.updateProfile({
-                    displayName: name
-                });
-            })
+            .then((userCredential) => userCredential.user.updateProfile({ displayName: name }))
             .then(async () => {
                 const user = firebase.auth().currentUser;
                 await setDoc(doc(db, "users", user.uid), {
@@ -209,8 +172,7 @@ import { db, doc, setDoc } from "./firebase.js";
                     role: "user",
                     dataCriacao: new Date().toISOString()
                 }, { merge: true });
-                
-                // ✅ ENVIAR EMAIL DE BOAS-VINDAS
+
                 return enviarEmailBoasVindas(name, email);
             })
             .then((emailResponse) => {
@@ -219,104 +181,75 @@ import { db, doc, setDoc } from "./firebase.js";
                 } else {
                     messageElement.textContent = 'Rebelde recrutado com sucesso! (Email não enviado)';
                 }
-                
-                messageElement.classList.remove('text-yellow-500');
-                messageElement.classList.add('text-green-500');
 
-                // Limpar formulário
+                messageElement.classList.remove('text-warning');
+                messageElement.classList.add('text-highlight');
+
                 document.getElementById('name').value = '';
                 document.getElementById('newEmail').value = '';
                 document.getElementById('newPassword').value = '';
 
-                setTimeout(() => {
-                    showLoginForm();
-                }, 3000);
+                setTimeout(() => showLoginForm(), 3000);
             })
             .catch((error) => {
                 let errorMessage = 'Erro no recrutamento rebelde!';
-                
                 switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage = 'Este email já está na Rebelião!';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'Email da Força inválido!';
-                        break;
-                    case 'auth/operation-not-allowed':
-                        errorMessage = 'Operação não permitida!';
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage = 'Senha Jedi muito fraca! Use pelo menos 6 caracteres.';
-                        break;
-                    default:
-                        errorMessage = 'Falha no recrutamento rebelde!';
+                    case 'auth/email-already-in-use': errorMessage = 'Este email já está na Rebelião!'; break;
+                    case 'auth/invalid-email': errorMessage = 'Email da Força inválido!'; break;
+                    case 'auth/operation-not-allowed': errorMessage = 'Operação não permitida!'; break;
+                    case 'auth/weak-password': errorMessage = 'Senha Jedi muito fraca! Use pelo menos 6 caracteres.'; break;
                 }
-                
                 messageElement.textContent = errorMessage;
-                messageElement.classList.remove('text-yellow-500', 'text-green-500');
-                messageElement.classList.add('text-red-500');
+                messageElement.classList.remove('text-warning', 'text-highlight');
+                messageElement.classList.add('text-error');
             });
     }
 
-    // Função de recuperação de senha
     function startRecovery() {
         const email = document.getElementById('recoveryEmail').value;
         const messageElement = document.getElementById('recoveryMessage');
-        
+
         if (!email) {
             messageElement.textContent = 'Por favor, informe seu email Jedi.';
-            messageElement.classList.remove('text-green-500');
-            messageElement.classList.add('text-red-500');
+            messageElement.classList.remove('text-highlight');
+            messageElement.classList.add('text-error');
             return;
         }
-        
+
         messageElement.textContent = 'Enviando mensagem holográfica...';
-        messageElement.classList.remove('text-red-500', 'text-green-500');
-        messageElement.classList.add('text-yellow-500');
-        
+        messageElement.classList.remove('text-error', 'text-highlight');
+        messageElement.classList.add('text-warning');
+
         firebase.auth().sendPasswordResetEmail(email)
             .then(() => {
                 messageElement.textContent = 'Mensagem holográfica enviada! Verifique seu email.';
-                messageElement.classList.remove('text-yellow-500');
-                messageElement.classList.add('text-green-500');
-                
-                setTimeout(() => {
-                    showLoginForm();
-                }, 3000);
+                messageElement.classList.remove('text-warning');
+                messageElement.classList.add('text-highlight');
+
+                setTimeout(() => showLoginForm(), 3000);
             })
             .catch((error) => {
                 let errorMessage = 'Erro ao enviar mensagem holográfica!';
-                
                 switch (error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'Email Jedi inválido!';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'Jedi não encontrado nos registros!';
-                        break;
-                    default:
-                        errorMessage = 'Falha no sistema de comunicação!';
+                    case 'auth/invalid-email': errorMessage = 'Email Jedi inválido!'; break;
+                    case 'auth/user-not-found': errorMessage = 'Jedi não encontrado nos registros!'; break;
                 }
-                
                 messageElement.textContent = errorMessage;
-                messageElement.classList.remove('text-yellow-500', 'text-green-500');
-                messageElement.classList.add('text-red-500');
+                messageElement.classList.remove('text-warning', 'text-highlight');
+                messageElement.classList.add('text-error');
             });
     }
 
-    // Função para verificar código de recuperação (placeholder)
     function verifyRecoveryCode() {
         const messageElement = document.getElementById('recoveryMessage');
         messageElement.textContent = 'Funcionalidade de verificação de código em desenvolvimento.';
-        messageElement.classList.remove('text-green-500');
-        messageElement.classList.add('text-yellow-500');
+        messageElement.classList.remove('text-highlight');
+        messageElement.classList.add('text-warning');
     }
 
-    // Verificar se usuário já está logado ao carregar a página
     function checkAuthState() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                // Usuário já está logado, redirecionar diretamente
                 console.log('Usuário já logado, redirecionando...');
                 window.location.href = 'lista.html';
             } else {
@@ -325,15 +258,11 @@ import { db, doc, setDoc } from "./firebase.js";
         });
     }
 
-    // Função para esconder tela de boas-vindas
     function hideWelcomeScreen() {
         const welcomeScreen = document.getElementById('welcomeScreen');
-        if (welcomeScreen) {
-            welcomeScreen.classList.add('hidden');
-        }
+        if (welcomeScreen) welcomeScreen.classList.add('hidden');
     }
 
-    // Configuração do formulário de contato
     function setupContactForm() {
         const contactForm = document.getElementById("contact-form");
         if (!contactForm) return;
@@ -348,15 +277,15 @@ import { db, doc, setDoc } from "./firebase.js";
 
             if (nome && email && mensagem) {
                 feedback.textContent = "Mensagem enviada com sucesso!";
-                feedback.style.color = "#7cfc00";
+                feedback.classList.remove('text-error');
+                feedback.classList.add('text-highlight');
                 this.reset();
 
-                setTimeout(() => {
-                    feedback.textContent = "";
-                }, 10000);
+                setTimeout(() => { feedback.textContent = ""; }, 10000);
             } else {
                 feedback.textContent = "Preencha todos os campos.";
-                feedback.style.color = "red";
+                feedback.classList.remove('text-highlight');
+                feedback.classList.add('text-error');
             }
         });
 
@@ -372,74 +301,53 @@ import { db, doc, setDoc } from "./firebase.js";
             });
 
             closeForm.addEventListener("click", () => {
-                fecharFormulario();
-            });
-
-            document.addEventListener("click", (event) => {
-                const isActive = containerForm.classList.contains("form-active");
-
-                if (
-                    isActive &&
-                    !contactForm.contains(event.target) &&
-                    !openForm.contains(event.target)
-                ) {
-                    fecharFormulario();
-                }
-            });
-
-            function fecharFormulario() {
                 containerForm.classList.remove("form-active");
                 openForm.style.display = "flex";
                 document.body.style.overflowY = "scroll";
-            }
+            });
+
+            document.addEventListener("click", (event) => {
+                if (containerForm.classList.contains("form-active") &&
+                    !contactForm.contains(event.target) &&
+                    !openForm.contains(event.target)
+                ) {
+                    containerForm.classList.remove("form-active");
+                    openForm.style.display = "flex";
+                    document.body.style.overflowY = "scroll";
+                }
+            });
         }
     }
 
-
-    // Inicializar quando a página carregar
+    // Inicialização
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM carregado, inicializando aplicação...');
-        
         createStars();
         checkAuthState();
         setupContactForm();
 
-        // Adicionar efeito de profundidade
         document.querySelectorAll('.depth-effect').forEach(element => {
             element.addEventListener('mouseenter', function() {
                 this.style.transition = 'all 0.3s ease';
             });
         });
 
-        // Debug: testar EmailJS
         console.log('EmailJS disponível:', typeof emailjs !== 'undefined');
-        if (typeof emailjs !== 'undefined') {
-            console.log('EmailJS inicializado com sucesso');
-        } else {
-            console.error('EmailJS não carregado');
-        }
     });
 
-    // Teste manual da função (para debug)
+    // Função de teste de email
     window.testarEmail = function() {
         const testEmail = prompt('Digite um email para teste:');
         if (testEmail) {
             enviarEmailBoasVindas('Usuário Teste', testEmail)
                 .then(result => {
-                    if (result && result.status === 200) {
-                        alert('Email de teste enviado com sucesso!');
-                    } else {
-                        alert('Email de teste não enviado. Verifique o console.');
-                    }
+                    if (result && result.status === 200) alert('Email de teste enviado com sucesso!');
+                    else alert('Email de teste não enviado. Verifique o console.');
                 })
-                .catch(error => {
-                    console.error('Erro no teste:', error);
-                    alert('Erro ao enviar email de teste. Verifique o console.');
-                });
+                .catch(error => { console.error('Erro no teste:', error); alert('Erro ao enviar email de teste.'); });
         }
     };
 
-    // Expor funções para o escopo global
+    // Exportar funções globalmente
     window.openModal = openModal;
     window.closeModal = closeModal;
     window.showLoginForm = showLoginForm;
@@ -450,4 +358,5 @@ import { db, doc, setDoc } from "./firebase.js";
     window.startRecovery = startRecovery;
     window.verifyRecoveryCode = verifyRecoveryCode;
     window.hideWelcomeScreen = hideWelcomeScreen;
+
 })();

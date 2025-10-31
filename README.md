@@ -173,6 +173,7 @@ This solution satisfies all the requirements:
 | 1.7.1   | 29/09/2025 | ***Gabriel*** corrected minor issues on pages and updated the README.  |
 | 1.8.0   | 20/10/2025 | ***Gabriel*** added role field to users, restricted CRUD by role, documented security rules in Firestore, and deployed the updates to Firebase Hosting.|
 | 1.9.0   | 26/10/2025 | ***Gabriel*** added a page with the application's privacy policies and a contact form for users to contact the team.|
+| 2.0.0   | 31/10/2025 | ***Gabriel*** added Star Wars-themed background music and sound effects with autoplay handling and user audio preferences. |
 
 
 ---

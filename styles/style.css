@@ -31,7 +31,24 @@ h2, h3{
     font-family: "Audiowide", sans-serif;
     font-weight: 600;
     font-size: 17px;
+    text-transform: uppercase;
 }
+
+.text-warning { color: var(--highlighted-color); }
+
+.text-error {
+    color: rgb(172, 0, 0);
+    animation: moverTitulo .3s ease-in-out 1; 
+}
+
+@keyframes moverTitulo {
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.hidden { display: none; }
 
 svg #fundo{ fill: var(--primary-color); }
 svg #front{ fill: var(--secondary-color); }
@@ -40,7 +57,7 @@ svg #front{ fill: var(--secondary-color); }
 .toggle-tema-container{
     position: absolute;
     top: 5%;
-    right: 1.5%;
+    right: 2%;
     border-radius: 20px;
     width: 60px;
     height: 30px;
@@ -49,6 +66,24 @@ svg #front{ fill: var(--secondary-color); }
     transition: all var(--first-time) ease-in-out;
     background-color: var(--primary-color);
     z-index: 100;
+}
+
+.toggle-tema-container:hover{ border: 2px solid var(--highlighted-color); }
+.toggle-tema-container:hover #tema-btn{ background-color: var(--highlighted-color); }
+
+#pausar-musica{
+    position: absolute;
+    top: 5%;
+    left: 3%;
+    font-size: 1.6em;
+    z-index: 100;
+    transition: all .3s ease-in-out;
+    cursor: pointer
+}
+
+#pausar-musica:hover{
+    color: var(--highlighted-color);
+    text-shadow: 0 3px 7px var(--highlighted-color);
 }
 
 #tema-btn{ 
@@ -69,9 +104,6 @@ svg #front{ fill: var(--secondary-color); }
     width: 90%;
     height: 90%;
 }
-
-.toggle-tema-container:hover{ border: 2px solid var(--highlighted-color); }
-.toggle-tema-container:hover #tema-btn{ background-color: var(--highlighted-color); }
 
 .perfil-usuario:hover,
 .toggle-tema-container:hover{ box-shadow: 0 0 7px var(--highlighted-color), 0 0 7px var(--highlighted-color); }
@@ -159,11 +191,15 @@ svg #front{ fill: var(--secondary-color); }
 
 .contact-form{
     display: flex;
-    justify-content: center;
+    flex-direction: column; 
+    justify-content: flex-start;
     align-items: center;
     padding: 5%;
     width: 100%;
     height: 100%;
+    max-height: 100%; 
+    overflow-y: auto; 
+    box-sizing: border-box; 
 }
 
 .contact-form h2 {
@@ -190,7 +226,7 @@ label {
 
 input, textarea, select {
     width: 100%;
-    padding: 5px;
+    padding: 5px 10px;
     margin-bottom: 5px;
     border-radius: 15px;
     font-size: 14px;
@@ -198,14 +234,12 @@ input, textarea, select {
     border: 2px solid var(--secondary-color);
     background-color: var(--primary-color);
     color: var(--secondary-color);
-    transition: all .3s ease-in-out;
-    padding: 5px 10px !important;
+    transition: all 0.3s ease-in-out;
 }
 
 input:focus, 
 textarea:focus, 
-select:focus{ border-color: var(--highlighted-color);}
-
+select:focus { border-color: var(--highlighted-color) !important;}
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -268,7 +302,7 @@ input:-webkit-autofill:active {
     align-items: center;
     cursor: pointer;
     bottom: 3%;
-    right: 1.5%;
+    right: 2%;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -287,26 +321,25 @@ input:-webkit-autofill:active {
     box-shadow: 0 4px 15px var(--highlighted-color);
 }
 
-.close-form{
+.close-form,
+.close-register{
     position: absolute;
     top: 2%;
-    right: 2.5%;
+    right: 2%;
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 35px;
     color: var(--secondary-color);
     transition: all .3s ease-in-out;
     font-size: 1.3em;
 }
 
-.close-form:hover{ 
+.close-form:hover,
+.close-register:hover{ 
     transform: translateY(-3px);
     color: var(--highlighted-color); 
     text-shadow: 0 3px 7px var(--highlighted-color);
 }
-
-/* .close-form i{} */
 
 .btn-container{
     display: flex;
@@ -387,9 +420,8 @@ footer p{
         margin-top: 5%;
     }
 
-    .toggle-tema-container{
-        right: 3%;
-    }
+    .toggle-tema-container{ right: 5%; }
+    #pausar-musica{ left: 5%; }
 
     .open-form{
         position: fixed;
@@ -400,5 +432,13 @@ footer p{
     .login-btn{
         width: 85%;
         height: 4em;
+    }
+}
+
+@media (max-width: 850px) and (orientation: landscape){
+    .seta{ display: none;}
+
+    textarea{
+        padding: 100px;
     }
 }

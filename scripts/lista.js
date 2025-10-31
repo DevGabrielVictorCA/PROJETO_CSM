@@ -23,8 +23,8 @@ import { auth, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from '
 
     async function adicionarTarefaExemplo() {
         const tarefaExemplo = {
-            titulo: "Exemplo",
-            descricao: "Esta é uma tarefa de exemplo.",
+            titulo: "Tarefa Exemplo",
+            descricao: "Esta é uma tarefa de exemplo. Você pode editar o título e a descrição, marcar como concluída ou excluí-la se quiser. Use-a para testar como gerenciar suas tarefas no Star Wars To-do List.\n\nQue a Força esteja com você!",
             dataCriacao: Date.now(),
             completo: false
         };
