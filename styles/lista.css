@@ -6,41 +6,6 @@
     box-sizing: border-box;
 }
 
-/* :root{
-    --primary-color: #e6e6c5;
-    --secondary-color: #442007;
-    --highlighted-color: #03bfcc;
-    --matte-color: #A97247;
-    --first-time: .3s;
-    --transicao-tema: all 2s ease-in-out;
-
-}
-
-@media(prefers-color-scheme: dark){
-    :root{
-        --primary-color: #000000;
-        --secondary-color: #FFFFFF;
-        --highlighted-color: #992828;
-        --matte-color: #929191;
-    }
-}
-
-[data-tema="dark"]{
-    --primary-color: #000000;
-    --secondary-color: #FFFFFF;
-    --highlighted-color: #992828;
-    --matte-color: #929191;
-}
-
-[data-tema="light"]{
-    --primary-color: #e6e6c5;
-    --secondary-color: #442007;
-    --highlighted-color: #03bfcc;
-    --matte-color: #A97247;
-}
-
-[data-tema="light"], [data-tema="dark"] { transition: var(--transicao-tema); } */
-
 #img-indicador { transition: opacity 0.3s ease-in-out; }
 .fade-out { opacity: 0; }
 .fade-in { opacity: 1; }
@@ -99,6 +64,28 @@ header div{
     outline: 2px solid var(--highlighted-color);
 }
 
+.audio{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+#pausar-musica{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.6em;
+    z-index: 100;
+    padding-right: 1.5em;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+
+#pausar-musica:hover{
+    color: var(--highlighted-color);
+    text-shadow: 0 3px 7px var(--highlighted-color);
+}
+
 .toggle-tema-container{
     position: relative;
     border-radius: 20px;
@@ -135,7 +122,7 @@ header div{
 .perfil-usuario:hover,
 .toggle-tema-container:hover{ box-shadow: 0 0 7px var(--highlighted-color), 0 0 7px var(--highlighted-color); }
 
-#tema-btn.tema-ativado{  transform: translateX(-28px); }
+#tema-btn.tema-ativado{  transform: translateX(-1.5em); }
 
 .all-list{
     display: flex;
@@ -365,6 +352,7 @@ header div{
     font-size: 20px;
     border-radius: 20px;
     transition: all var(--first-time) ease-in-out;
+    z-index: 200;
 }
 
 .edit-container input,
@@ -426,7 +414,7 @@ input:-webkit-autofill:active {
 
 .edit-container textarea{
     resize: none;
-    font-size: 14px;
+    font-size: 14.5px;
     height: 100%;
     padding-left: 10px;
     padding-top: 5px;
@@ -511,6 +499,8 @@ input:-webkit-autofill:active {
 #categoriaSelect:focus{ border-color: var(--highlighted-color); }
 
 @media screen and (max-width: 600px){
+    #tema-btn.tema-ativado{  transform: translateX(-17px); }
+
     .edit-container{
         width: 100vw;
         margin-top: 5%;
@@ -520,7 +510,7 @@ input:-webkit-autofill:active {
 }
 
 @media (max-width: 850px) and (orientation: landscape) {
-     header { padding: 20px 7%; }
+     header { padding: 20px 4%; }
     
     .all-list, 
     .edit-container{
@@ -536,9 +526,19 @@ input:-webkit-autofill:active {
 
     .logo h1{ font-size: 11px; }
 
+    .audio{
+        justify-content: flex-start;
+        padding-right: 20.1em;
+        width: auto;
+    }
+
+    #pausar-musica{
+        font-size: 1.4em;
+    }
+
     .hero i{ 
         top: 30px;
-        right: 100px;
+        right: 80px;
     }
 
     .indicador-tarefas img{

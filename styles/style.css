@@ -6,23 +6,58 @@
     box-sizing: border-box;
 }
 
-body{
+html body{
     background-color: var(--primary-color);
     color: var(--secondary-color);
-    font-family: 'Exo 2', sans-serif;
+    font-family: "Exo 2", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
     transition: all .3s ease-in-out;
 }
 
 h1{
+    width: 100%;
     text-align: center;
-    color: var(--secondary-color);
+    bottom: 15%;
+    font-family: "Audiowide", sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 19px;
 }
+
+h2, h3{
+    font-family: "Audiowide", sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    text-transform: uppercase;
+}
+
+.text-warning { color: var(--highlighted-color); }
+
+.text-error {
+    color: rgb(172, 0, 0);
+    animation: moverTitulo .3s ease-in-out 1; 
+}
+
+@keyframes moverTitulo {
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.hidden { display: none; }
+
+svg #fundo{ fill: var(--primary-color); }
+svg #front{ fill: var(--secondary-color); }
 
 
 .toggle-tema-container{
     position: absolute;
     top: 5%;
-    right: 1.5%;
+    right: 2%;
     border-radius: 20px;
     width: 60px;
     height: 30px;
@@ -30,6 +65,25 @@ h1{
     cursor: pointer;
     transition: all var(--first-time) ease-in-out;
     background-color: var(--primary-color);
+    z-index: 100;
+}
+
+.toggle-tema-container:hover{ border: 2px solid var(--highlighted-color); }
+.toggle-tema-container:hover #tema-btn{ background-color: var(--highlighted-color); }
+
+#pausar-musica{
+    position: absolute;
+    top: 5%;
+    left: 3%;
+    font-size: 1.6em;
+    z-index: 100;
+    transition: all .3s ease-in-out;
+    cursor: pointer
+}
+
+#pausar-musica:hover{
+    color: var(--highlighted-color);
+    text-shadow: 0 3px 7px var(--highlighted-color);
 }
 
 #tema-btn{ 
@@ -51,14 +105,17 @@ h1{
     height: 90%;
 }
 
-.toggle-tema-container:hover{ border: 2px solid var(--highlighted-color); }
-.toggle-tema-container:hover #tema-btn{ background-color: var(--highlighted-color); }
-
 .perfil-usuario:hover,
 .toggle-tema-container:hover{ box-shadow: 0 0 7px var(--highlighted-color), 0 0 7px var(--highlighted-color); }
 
 #tema-btn.tema-ativado{  transform: translateX(-28px); }
 
+.login-btn{
+    font-family: "Audiowide", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 16.5px;
+}
 
 .card-sobre,
 .card-curiosidade{
@@ -90,11 +147,10 @@ h1{
 
 .card-author:hover{ 
     border-color: var(--highlighted-color); 
+    transform: translateY(-.3em);
+    box-shadow: 0 5px 15px var(--secondary-color);
 }
-.card-author:hover .img-author{ 
-    /* border-color: var(--secondary-color); */
-    outline-color: var(--highlighted-color);
-}
+.card-author:hover .img-author{  outline-color: var(--highlighted-color); }
 
 .card-author h3{ color: var(--highlighted-color); }
 .card-author p{ color: var(--primary-color); }
@@ -105,41 +161,55 @@ h1{
 }
 .author-links:hover{ color: var(--highlighted-color); }
 
-.container {
-    display: flex;
-    clip-path: inset(100% 0 0 0);
-    position: fixed;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    right: 50%;
-    transform: translateX(50%);
-    height: 100dvh;
-    width: 100vw;
-    background: rgba(0, 0, 0, 0.4); 
-    backdrop-filter: blur(10px) brightness(0.8); 
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    z-index: 100;
-    transition: all 0.3s ease;
-    border: 2px solid var(--highlighted-color);
+.contact-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  width: 600px;
+  height: 90%;
+  max-height: 600px;
+  transform: translate(50%, -50%);
+  background: var(--primary-color); 
+  backdrop-filter: blur(10px); 
+  border-radius: 10px;
+  border: 2px solid var(--secondary-color);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  clip-path: inset(50% 0 50% 0);
+  transition: all .3s ease-in-out;
 }
 
+.contact-container.form-active {
+  opacity: 1;
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+}
 
-.container.form-active{ 
+.contact-form{
     display: flex;
-    opacity: 1; 
-    visibility: visible;
-    clip-path: inset(0 0 0 0);
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5%;
+    width: 100%;
+    height: 100%;
+    max-height: 100%; 
+    overflow-y: auto; 
+    box-sizing: border-box; 
 }
 
 .contact-form h2 {
     text-align: center;
     font-size: 18px;
-    background: var(--highlighted-color);
-    font-weight: bold;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--highlighted-color);
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    font-family: "Audiowide", sans-serif;
+    font-weight: 400;
 }
 
 form {
@@ -148,34 +218,76 @@ form {
 }
 
 label {
-    color: var(--highlighted-color);
+    width: 100%;
+    text-align: left;
+    color: var(--secondary-color);
     margin: 5px 0;
 }
 
 input, textarea, select {
-    padding: 5px;
-    border-radius: 5px;
+    width: 100%;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    border-radius: 15px;
     font-size: 14px;
     outline: none;
-    color: var(--primary-color);
-    border: 2px solid var(--highlighted-color);
+    border: 2px solid var(--secondary-color);
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    transition: all 0.3s ease-in-out;
 }
 
 input:focus, 
 textarea:focus, 
-select:focus{ border: 2px solid var(--highlighted-color);}
+select:focus { border-color: var(--highlighted-color) !important;}
 
-button {
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--secondary-color)!important;                    
+    transition: background-color 5000s ease-in-out 0s;           
+}
+
+.enviar-email {
+    position: relative;
     margin-top: 15px;
-    padding: 12px;
-    background-color: var(--highlighted-color);
-    color: white;
+    padding: 12px 5%;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    width: 100%;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 1em;
     cursor: pointer;
-    transition: all .3s ease;
+    transition: all .3s ease-in-out;
     cursor: pointer;
+}
+
+
+.enviar-email::before{
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: var(--highlighted-color);
+    z-index: -1;
+    top: 0;
+    left: 0;
+    transform: scaleX(0);
+    transition: all var(--first-time) ease-in-out;
+    transform-origin: left;
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.enviar-email:hover{ 
+    transform: translateX(0);
+    color: var(--secondary-color);
+}
+.enviar-email:hover::before{ 
+    transform: scaleX(1); 
 }
 
 #feedback { 
@@ -184,13 +296,13 @@ button {
 }
 
 .open-form{
-    position: fixed;
     display: flex;
+    position: fixed;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    bottom: 20px;
-    right: 1.5%;
+    bottom: 3%;
+    right: 2%;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -209,28 +321,24 @@ button {
     box-shadow: 0 4px 15px var(--highlighted-color);
 }
 
-.close-form{
+.close-form,
+.close-register{
     position: absolute;
-    top: -5px;
-    right: 20px;
+    top: 2%;
+    right: 2%;
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 35px;
-    color: var(--highlighted-color);
-    transition: transform .3s ease-in-out;
+    color: var(--secondary-color);
+    transition: all .3s ease-in-out;
+    font-size: 1.3em;
 }
 
-.close-form:hover{ 
-    color: var(--highlighted-color);
-    animation: pulsar 1s ease-in-out infinite; 
-    text-shadow: 0 7px 15px var(--highlighted-color);
-}
-
-@keyframes pulsar{
-    0% { transform: scale(1);}
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+.close-form:hover,
+.close-register:hover{ 
+    transform: translateY(-3px);
+    color: var(--highlighted-color); 
+    text-shadow: 0 3px 7px var(--highlighted-color);
 }
 
 .btn-container{
@@ -242,49 +350,11 @@ button {
     padding: 50px 0;
 }
 
-.item-lista{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    position: relative;
-    background-color: var(--secondary-color);
-    color: var(--primary-color);
-    padding: 15px 10px;
-    border-radius: 10px;
-    height: 60px;
-    width: 35%;
-    transition: all var(--first-time) ease-in-out;
-    border-left: 7px solid var(--highlighted-color);
-    margin-bottom: 3px;
-    z-index: 1;
-}
-
-.item-lista:hover{ color: var(--secondary-color);}
-
-.item-lista::before{
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    background-color: var(--highlighted-color);
-    z-index: -1;
-    top: 0;
-    left: 0;
-    transform: scaleX(0);
-    transition: all var(--first-time) ease-in-out;
-    transform-origin: left;
-    border-radius: 0 10px 10px 0;
-    z-index: -1;
-}
-
-.item-lista:hover::before{ transform: scaleX(1); }
-
 .footer-links{
     color: var(--secondary-color);
     padding: 20px;
     margin-bottom: 20px;
-    font-weight: 500;
+    font-weight: 600;
     opacity: .9;
     transition: all .1s ease-in;
 }
@@ -296,7 +366,7 @@ button {
 
 .login-form{
     background-color: var(--primary-color); 
-    border: 4px solid var(--highlighted-color);
+    border: 3px solid var(--secondary-color);
 }
 
 #loginFormElement label,
@@ -310,16 +380,65 @@ button {
 #registerFormElement input,
 #recoveryFormElement input{
     background-color: var(--primary-color);
-    border: 1px solid var(--secondary-color);
+    border: 2px solid var(--secondary-color);
     color: var(--secondary-color);
 }
 
 #loginFormElement input:focus,
 #registerFormElement input:focus,
 #registerFormElement div input:focus{ 
-    /* outline: 2px solid var(--highlighted-color); */
     background-color: var(--primary-color);
+}
+
+#loginFormElement button,
+#registerFormElement button,
+#recoveryFormElement button{
+    font-family: "Audiowide", sans-serif;
+    font-weight: 500;
+}
+
+.register-form{
+    font-weight: bold;
 }
 
 #close-modal-register{ color: var(--highlighted-color); }
 #close-modal-register:hover{ animation: pulsar .9s ease-in-out infinite; }
+
+footer p{
+    color: var(--secondary-color);
+    font-weight: 500;
+    opacity: .7;
+}
+
+@media screen and (max-width: 600px){
+    #hero{
+        padding-top: 50px;
+    }
+
+    .contact-container{
+        width: 95vw;
+        margin-top: 5%;
+    }
+
+    .toggle-tema-container{ right: 5%; }
+    #pausar-musica{ left: 5%; }
+
+    .open-form{
+        position: fixed;
+        bottom: 3%;
+        right: 3%;
+    }
+
+    .login-btn{
+        width: 85%;
+        height: 4em;
+    }
+}
+
+@media (max-width: 850px) and (orientation: landscape){
+    .seta{ display: none;}
+
+    textarea{
+        padding: 100px;
+    }
+}
