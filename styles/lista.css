@@ -122,7 +122,7 @@ header div{
 .perfil-usuario:hover,
 .toggle-tema-container:hover{ box-shadow: 0 0 7px var(--highlighted-color), 0 0 7px var(--highlighted-color); }
 
-#tema-btn.tema-ativado{  transform: translateX(-1.5em); }
+#tema-btn.tema-ativado{  transform: translateX(-24px); }
 
 .all-list{
     display: flex;
@@ -499,7 +499,7 @@ input:-webkit-autofill:active {
 #categoriaSelect:focus{ border-color: var(--highlighted-color); }
 
 @media screen and (max-width: 600px){
-    #tema-btn.tema-ativado{  transform: translateX(-17px); }
+    #tema-btn.tema-ativado{  transform: translateX(-28px); }
 
     .edit-container{
         width: 100vw;
