@@ -507,6 +507,13 @@ input:-webkit-autofill:active {
     }
 
     .item-lista p{ padding:20px 50px; }
+
+    .audio{
+        position: absolute;
+        width: auto;
+        top: 35%;
+        left: 70%;
+    }
 }
 
 @media (max-width: 850px) and (orientation: landscape) {
