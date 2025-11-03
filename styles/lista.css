@@ -97,6 +97,9 @@ header div{
     background-color: var(--primary-color);
 }
 
+.toggle-tema-container:hover{ border: 2px solid var(--highlighted-color); }
+.toggle-tema-container:hover #tema-btn{ background-color: var(--highlighted-color); }
+
 #tema-btn{ 
     position: absolute;
     display: flex;
@@ -116,13 +119,10 @@ header div{
     height: 90%;
 }
 
-.toggle-tema-container:hover{ border: 2px solid var(--highlighted-color); }
-.toggle-tema-container:hover #tema-btn{ background-color: var(--highlighted-color); }
+#tema-btn.tema-ativado{  transform: translateX(-26px); }
 
 .perfil-usuario:hover,
 .toggle-tema-container:hover{ box-shadow: 0 0 7px var(--highlighted-color), 0 0 7px var(--highlighted-color); }
-
-#tema-btn.tema-ativado{  transform: translateX(-24px); }
 
 .all-list{
     display: flex;
@@ -517,8 +517,10 @@ input:-webkit-autofill:active {
 }
 
 @media (max-width: 850px) and (orientation: landscape) {
-     header { padding: 20px 4%; }
-    
+    header { padding: 20px 4%; }
+
+    #tema-btn.tema-ativado{  transform: translateX(-28px); }
+
     .all-list, 
     .edit-container{
         min-height: 100vh;

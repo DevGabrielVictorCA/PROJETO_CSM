@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" href="images/millennium-falcon.png" type="image/png" sizes="32x32">
     <script src="https://kit.fontawesome.com/3bc329aa88.js" crossorigin="anonymous"></script>
+    
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body class="min-h-screen">
 <!-- Hero Section com fundo estrelado -->
@@ -418,17 +421,26 @@
 
 <footer class="py-8 text-center border-t" style="border-top: 2px solid var(--highlighted-color);">
     <a href="politicas.html" target="_blank" class="footer-links">Políticas de Privacidade</a>
-    <p class="py-2 pt-5">Que a força esteja com você!</p>
+    <p class="py-2 pt-5">Que a força (e o código) esteja com você!</p>
     <p>2025 Star Wars To-Do List</p>
 </footer>
 
-<!-- Scripts -->
-<script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    
-    // Your web app's Firebase configuration
+<!-- Scripts na ORDEM CORRETA -->
+<script>
+    // Inicializar EmailJS
+    document.addEventListener('DOMContentLoaded', function() {
+        emailjs.init("mr8ko0PM9f1zIbVd1");
+        console.log('EmailJS inicializado');
+    });
+</script>
+
+<script type="module" src="scripts/script.js"></script>
+
+<!-- Firebase v8 (compatibilidade) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script>
+    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAAse8fcxMntSDgI4ssrKVcuS14TIcxqYo",
         authDomain: "star-wars-list-b450b.firebaseapp.com",
@@ -437,22 +449,15 @@
         messagingSenderId: "1078874247193",
         appId: "1:1078874247193:web:5ab3e99fcf561140dcda88"
     };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    
-    // Disponibilizar globalmente
-    window.firebaseAuth = auth;
-    console.log('Firebase v9 inicializado!');
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
 </script>
-
-<!-- Script principal -->
-<script src="scripts/script.js"></script>
 
 <!-- Outros scripts -->
 <script src="scripts/tema.js"></script>
 <script src="scripts/audio-tema.js"></script>
+<script type="module" src="scripts/firebase.js"></script>
+<script type="module" src="scripts/auth.js"></script>
 
 </body>
 </html>

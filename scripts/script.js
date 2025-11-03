@@ -1,642 +1,362 @@
-// scripts/script.js - VERSÃO COMPLETA FIREBASE v9 CORRIGIDA
+// scripts/script.js
+import { db, doc, setDoc } from "./firebase.js";
 
-console.log('⭐ Star Wars To-Do List - Script carregado!');
+(function () {
+    "use strict";
 
-// Serviço Resend integrado
-class ResendService {
-    constructor() {
-        this.apiKey = 're_AXmexEMS_GqzW3N9WXiiKa1SioRmStPb9';
-        this.baseUrl = 'https://api.resend.com';
-        this.isProduction = window.location.hostname === 'starwarstodolist.shop' || 
-                        window.location.hostname === 'www.starwarstodolist.shop';
-                        
+    // Variáveis globais
+    let recoveryCode = null;
+    let recoveryEmail = null;
+
+    // Enviar email de boas-vindas
+    async function enviarEmailBoasVindas(nome, email) {
+        try {
+            console.log('Tentando enviar email para:', email);
+
+            const templateParams = { name: nome, email, to_email: email };
+
+            if (typeof emailjs === 'undefined') {
+                console.error('EmailJS não está carregado');
+                return null;
+            }
+
+            const response = await emailjs.send(
+                'service_up82fcd',
+                'template_jiu3n49',
+                templateParams
+            );
+
+            console.log('Email de boas-vindas enviado com sucesso!', response);
+            return response;
+
+        } catch (error) {
+            console.error('Erro detalhado ao enviar email:', error);
+            console.log('Código do erro:', error.code);
+            console.log('Mensagem:', error.text);
+            return null;
+        }
     }
 
-    async sendEmail({ to, subject, html, from = 'Star Wars To-Do List <sabrina.oliveira0133@gmail.com>' }) {
-        try {
-            console.log('📧 Enviando email via Resend...', { to, subject });
+    // Criar estrelas para fundo da galáxia
+    function createStars() {
+        const heroSection = document.getElementById('hero');
+        const starsCount = 200;
 
-            // ✅ CORREÇÃO: Endpoint correto
-            const response = await fetch(`${this.baseUrl}/emails/send`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${this.apiKey}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    from: from,
-                    to: to,
-                    subject: subject,
-                    html: html,
-                }),
+        for (let i = 0; i < starsCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            const size = Math.random() * 3;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDuration = `${2 + Math.random() * 5}s`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+
+            heroSection.appendChild(star);
+        }
+    }
+
+    // Modal
+    function openModal(type) {
+        const modal = document.getElementById('loginModal');
+        modal.classList.remove('hidden');
+
+        if (type === 'register') showRegisterForm();
+        else if (type === 'recovery') showRecoveryForm();
+        else showLoginForm();
+    }
+
+    function closeModal() {
+        document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    function showLoginForm() {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('recoveryForm').classList.add('hidden');
+        document.getElementById('loginMessage').classList.add('hidden');
+
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    function showRegisterForm() {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('recoveryForm').classList.add('hidden');
+        document.getElementById('registerMessage').classList.add('hidden');
+
+        document.getElementById('name').value = '';
+        document.getElementById('newEmail').value = '';
+        document.getElementById('newPassword').value = '';
+    }
+
+    function showRecoveryForm() {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('recoveryForm').classList.remove('hidden');
+        document.getElementById('step1').classList.remove('hidden');
+        document.getElementById('step2').classList.add('hidden');
+
+        const messageElement = document.getElementById('recoveryMessage');
+        messageElement.textContent = '';
+        messageElement.classList.remove('text-error', 'text-highlight', 'text-warning');
+
+        document.getElementById('recoveryEmail').value = '';
+        document.getElementById('recoveryCode').value = '';
+        document.getElementById('newPasswordRecovery').value = '';
+    }
+
+    // Fechar modal clicando fora
+    document.getElementById('loginModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    // Funções de autenticação
+    function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const messageElement = document.getElementById('loginMessage');
+
+        messageElement.textContent = 'Conectando à Força...';
+        messageElement.classList.remove('hidden', 'text-error', 'text-highlight');
+        messageElement.classList.add('text-warning');
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                messageElement.textContent = 'Conexão com a Força estabelecida!';
+                messageElement.classList.remove('text-warning');
+                messageElement.classList.add('text-highlight');
+
+                setTimeout(() => {
+                    closeModal();
+                    window.location.href = 'lista.html';
+                }, 1000);
+            })
+            .catch((error) => {
+                let errorMessage = 'Erro ao conectar com a Força!';
+                switch (error.code) {
+                    case 'auth/invalid-email': errorMessage = 'Email Jedi inválido!'; break;
+                    case 'auth/user-disabled': errorMessage = 'Este usuário Jedi foi desativado!'; break;
+                    case 'auth/user-not-found': errorMessage = 'Jedi não encontrado nos registros!'; break;
+                    case 'auth/wrong-password': errorMessage = 'Senha secreta incorreta!'; break;
+                    case 'auth/too-many-requests': errorMessage = 'Muitas tentativas. Tente novamente mais tarde!'; break;
+                }
+                messageElement.textContent = errorMessage;
+                messageElement.classList.remove('text-warning', 'text-highlight');
+                messageElement.classList.add('text-error');
+            });
+    }
+
+    function handleRegister(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('newEmail').value;
+        const password = document.getElementById('newPassword').value;
+        const messageElement = document.getElementById('registerMessage');
+
+        messageElement.textContent = 'Recrutando para a Rebelião...';
+        messageElement.classList.remove('hidden', 'text-error', 'text-highlight');
+        messageElement.classList.add('text-warning');
+
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => userCredential.user.updateProfile({ displayName: name }))
+            .then(async () => {
+                const user = firebase.auth().currentUser;
+                await setDoc(doc(db, "users", user.uid), {
+                    email: user.email,
+                    name: user.displayName,
+                    role: "user",
+                    dataCriacao: new Date().toISOString()
+                }, { merge: true });
+
+                return enviarEmailBoasVindas(name, email);
+            })
+            .then((emailResponse) => {
+                if (emailResponse && emailResponse.status === 200) {
+                    messageElement.textContent = 'Rebelde recrutado com sucesso! Email de boas-vindas enviado! 🚀';
+                } else {
+                    messageElement.textContent = 'Rebelde recrutado com sucesso! (Email não enviado)';
+                }
+
+                messageElement.classList.remove('text-warning');
+                messageElement.classList.add('text-highlight');
+
+                document.getElementById('name').value = '';
+                document.getElementById('newEmail').value = '';
+                document.getElementById('newPassword').value = '';
+
+                setTimeout(() => showLoginForm(), 3000);
+            })
+            .catch((error) => {
+                let errorMessage = 'Erro no recrutamento rebelde!';
+                switch (error.code) {
+                    case 'auth/email-already-in-use': errorMessage = 'Este email já está na Rebelião!'; break;
+                    case 'auth/invalid-email': errorMessage = 'Email da Força inválido!'; break;
+                    case 'auth/operation-not-allowed': errorMessage = 'Operação não permitida!'; break;
+                    case 'auth/weak-password': errorMessage = 'Senha Jedi muito fraca! Use pelo menos 6 caracteres.'; break;
+                }
+                messageElement.textContent = errorMessage;
+                messageElement.classList.remove('text-warning', 'text-highlight');
+                messageElement.classList.add('text-error');
+            });
+    }
+
+    function startRecovery() {
+        const email = document.getElementById('recoveryEmail').value;
+        const messageElement = document.getElementById('recoveryMessage');
+
+        if (!email) {
+            messageElement.textContent = 'Por favor, informe seu email Jedi.';
+            messageElement.classList.remove('text-highlight');
+            messageElement.classList.add('text-error');
+            return;
+        }
+
+        messageElement.textContent = 'Enviando mensagem holográfica...';
+        messageElement.classList.remove('text-error', 'text-highlight');
+        messageElement.classList.add('text-warning');
+
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                messageElement.textContent = 'Mensagem holográfica enviada! Verifique seu email.';
+                messageElement.classList.remove('text-warning');
+                messageElement.classList.add('text-highlight');
+
+                setTimeout(() => showLoginForm(), 3000);
+            })
+            .catch((error) => {
+                let errorMessage = 'Erro ao enviar mensagem holográfica!';
+                switch (error.code) {
+                    case 'auth/invalid-email': errorMessage = 'Email Jedi inválido!'; break;
+                    case 'auth/user-not-found': errorMessage = 'Jedi não encontrado nos registros!'; break;
+                }
+                messageElement.textContent = errorMessage;
+                messageElement.classList.remove('text-warning', 'text-highlight');
+                messageElement.classList.add('text-error');
+            });
+    }
+
+    function verifyRecoveryCode() {
+        const messageElement = document.getElementById('recoveryMessage');
+        messageElement.textContent = 'Funcionalidade de verificação de código em desenvolvimento.';
+        messageElement.classList.remove('text-highlight');
+        messageElement.classList.add('text-warning');
+    }
+
+    function checkAuthState() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log('Usuário já logado, redirecionando...');
+                window.location.href = 'lista.html';
+            } else {
+                console.log('Usuário não logado, permanecendo na página inicial.');
+            }
+        });
+    }
+
+    function hideWelcomeScreen() {
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        if (welcomeScreen) welcomeScreen.classList.add('hidden');
+    }
+
+    function setupContactForm() {
+        const contactForm = document.getElementById("contact-form");
+        if (!contactForm) return;
+
+        contactForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const mensagem = document.getElementById("message").value;
+            const feedback = document.getElementById("feedback");
+
+            if (nome && email && mensagem) {
+                feedback.textContent = "Mensagem enviada com sucesso!";
+                feedback.classList.remove('text-error');
+                feedback.classList.add('text-highlight');
+                this.reset();
+
+                setTimeout(() => { feedback.textContent = ""; }, 10000);
+            } else {
+                feedback.textContent = "Preencha todos os campos.";
+                feedback.classList.remove('text-highlight');
+                feedback.classList.add('text-error');
+            }
+        });
+
+        const openForm = document.querySelector(".open-form");
+        const closeForm = document.querySelector(".close-form");
+        const containerForm = document.querySelector(".contact-container");
+
+        if (openForm && closeForm && containerForm) {
+            openForm.addEventListener("click", () => {
+                containerForm.classList.add("form-active");
+                openForm.style.display = "none";
+                document.body.style.overflow = "hidden";
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('❌ Erro no Resend:', errorData);
-                throw new Error(errorData.message || `Erro: ${response.status}`);
-            }
+            closeForm.addEventListener("click", () => {
+                containerForm.classList.remove("form-active");
+                openForm.style.display = "flex";
+                document.body.style.overflowY = "scroll";
+            });
 
-            const data = await response.json();
-            console.log('✅ Email enviado:', data);
-            return { success: true, data };
-        } catch (error) {
-            console.error('❌ Erro ao enviar email:', error);
-            return { 
-                success: false, 
-                error: error.message
-            };
-        }
-    }
-
-    async sendWelcomeEmail(name, email) {
-        const subject = 'Bem-vindo(a) à Rebelião! - Star Wars To-Do List';
-        const html = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <style>
-                    body { font-family: 'Arial', sans-serif; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
-                    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-                    .header { background: linear-gradient(135deg, #ffd700, #ffed4e); padding: 30px 20px; text-align: center; }
-                    .content { padding: 40px 30px; }
-                    .star-wars-font { font-family: 'Orbitron', 'Arial', sans-serif; color: #000; font-size: 28px; font-weight: bold; margin: 0; }
-                    .button { background-color: #ffd700; color: #000; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; font-size: 16px; margin: 20px 0; border: 2px solid #000; }
-                    .features { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0; }
-                    .footer { text-align: center; padding: 20px; background: #2c3e50; color: white; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1 class="star-wars-font">STAR WARS TO-DO LIST</h1>
-                        <p style="color: #000; font-weight: bold; margin: 10px 0 0 0; font-size: 18px;">Que a Força esteja com suas tarefas!</p>
-                    </div>
-                    <div class="content">
-                        <h2>Olá, ${name}!</h2>
-                        <p>Bem-vindo(a) à Rebelião! Sua jornada para dominar suas tarefas diárias está apenas começando.</p>
-                        
-                        <div class="features">
-                            <h3>🎯 O que você pode fazer no nosso app:</h3>
-                            <ul>
-                                <li><strong>✨ Criar e gerenciar missões</strong> (suas tarefas diárias)</li>
-                                <li><strong>🗂️ Organizar por categorias</strong> personalizadas</li>
-                                <li><strong>📊 Acompanhar seu progresso</strong> com métricas visuais</li>
-                                <li><strong>🌌 Experienciar temas Star Wars</strong> únicos e imersivos</li>
-                            </ul>
-                        </div>
-                        
-                        <div style="text-align: center; margin: 30px 0;">
-                            <a href="https://starwarstodolist.shop" class="button">🚀 Iniciar Sua Missão</a>
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <p style="margin: 0;">Que a força (e a produtividade) esteja com você!<br><strong>Time Star Wars To-Do List</strong></p>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-
-        return await this.sendEmail({
-            to: email,
-            subject: subject,
-            html: html
-        });
-    }
-
-    async sendContactEmail({ name, email, subject, message }) {
-        const subjectOptions = {
-            'duvida-funcionalidades': '❓ Dúvida sobre Funcionalidades',
-            'problemas-conta': '🔐 Problema com Login ou Conta',
-            'sincronizacao': '🔄 Problema de Sincronização',
-            'sugestoes': '💡 Sugestão de Melhoria',
-            'feedback': '🌟 Feedback Geral',
-            'reclamacoes': '⚠️ Reclamação',
-            'colaboracoes': '🤝 Proposta de Colaboração',
-            'outros': '📨 Outro Assunto'
-        };
-
-        const subjectText = subjectOptions[subject] || '📨 Mensagem de Contato';
-
-        const html = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <style>
-                    body { font-family: 'Arial', sans-serif; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
-                    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-                    .header { background: linear-gradient(135deg, #4facfe, #00f2fe); padding: 25px 20px; text-align: center; color: white; }
-                    .content { padding: 30px; }
-                    .message-box { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #4facfe; margin: 20px 0; white-space: pre-wrap; }
-                    .footer { text-align: center; padding: 20px; background: #2c3e50; color: white; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1 style="margin: 0; font-size: 22px;">📨 NOVA MENSAGEM DE CONTATO</h1>
-                    </div>
-                    <div class="content">
-                        <p><strong>👤 Nome:</strong> ${name}</p>
-                        <p><strong>📧 Email:</strong> ${email}</p>
-                        <p><strong>🏷️ Assunto:</strong> ${subjectText}</p>
-                        
-                        <h3>📝 Mensagem:</h3>
-                        <div class="message-box">${message.replace(/\n/g, '<br>')}</div>
-                        
-                        <p><strong>📅 Data:</strong> ${new Date().toLocaleString('pt-BR')}</p>
-                    </div>
-                    <div class="footer">
-                        <p style="margin: 0;">💫 Star Wars To-Do List - starwarstodolist.shop</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-
-        return await this.sendEmail({
-            to: 'sabrina.oliveira0133@gmail.com',
-            subject: `📨 ${subjectText} - de ${name}`,
-            html: html
-        });
-    }
-
-    async sendNewUserNotification(userData) {
-        const html = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <style>
-                    body { font-family: 'Arial', sans-serif; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
-                    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-                    .header { background: linear-gradient(135deg, #32cd32, #228b22); padding: 25px 20px; text-align: center; color: white; }
-                    .content { padding: 30px; }
-                    .footer { text-align: center; padding: 20px; background: #2c3e50; color: white; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h1 style="margin: 0; font-size: 24px;">🎉 NOVO USUÁRIO CADASTRADO!</h1>
-                    </div>
-                    <div class="content">
-                        <h3>👤 Detalhes do Novo Rebelde:</h3>
-                        <p><strong>Nome Jedi:</strong> ${userData.name}</p>
-                        <p><strong>Email da Força:</strong> ${userData.email}</p>
-                        <p><strong>Data de Recrutamento:</strong> ${new Date().toLocaleString('pt-BR')}</p>
-                        
-                        <div style="background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                            <p style="margin: 0; font-weight: bold;">🎯 A Rebelião cresce! Mais um Jedi se juntou à nossa causa!</p>
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <p style="margin: 0;">🤖 Notificação automática - Star Wars To-Do List</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-
-        return await this.sendEmail({
-            to: 'sabrina.oliveira0133@gmail.com',
-            subject: '🎉 Novo Usuário registrado!',
-            html: html
-        });
-    }
-}
-
-const resendService = new ResendService();
-
-// ==================== FUNÇÕES DO MODAL ====================
-function openModal(type) {
-    console.log('🔓 Abrindo modal:', type);
-    const modal = document.getElementById('loginModal');
-    if (!modal) {
-        console.error('❌ Modal não encontrado!');
-        return false;
-    }
-    
-    modal.classList.remove('hidden');
-    modal.style.display = 'flex';
-
-    // Esconder todos os formulários
-    ['loginForm', 'registerForm', 'recoveryForm'].forEach(formId => {
-        const form = document.getElementById(formId);
-        if (form) {
-            form.style.display = 'none';
-            form.classList.add('hidden');
-        }
-    });
-
-    // Mostrar formulário correto
-    const targetForm = document.getElementById(type + 'Form');
-    if (targetForm) {
-        targetForm.style.display = 'block';
-        targetForm.classList.remove('hidden');
-        console.log('✅ Modal aberto com sucesso!');
-    }
-
-    return false;
-}
-
-function closeModal() {
-    console.log('🔒 Fechando modal');
-    const modal = document.getElementById('loginModal');
-    if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-        console.log('✅ Modal fechado!');
-    }
-}
-
-function showLoginForm() {
-    console.log('📝 Mostrando formulário de login');
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('registerForm').style.display = 'none';
-    document.getElementById('recoveryForm').style.display = 'none';
-}
-
-function showRegisterForm() {
-    console.log('📝 Mostrando formulário de registro');
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('registerForm').style.display = 'block';
-    document.getElementById('recoveryForm').style.display = 'none';
-}
-
-function showRecoveryForm() {
-    console.log('📝 Mostrando formulário de recuperação');
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('registerForm').style.display = 'none';
-    document.getElementById('recoveryForm').style.display = 'block';
-}
-
-// ==================== AUTENTICAÇÃO FIREBASE v9 ====================
-async function handleLogin(event) {
-    event.preventDefault();
-    console.log('🔐 Processando login...');
-
-    const email = document.getElementById('email')?.value;
-    const password = document.getElementById('password')?.value;
-    const messageElement = document.getElementById('loginMessage');
-
-    if (!email || !password) {
-        if (messageElement) {
-            messageElement.textContent = 'Por favor, preencha todos os campos.';
-            messageElement.style.color = 'red';
-        }
-        return;
-    }
-
-    try {
-        // Import dinâmico do Firebase v9
-        const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js');
-        const auth = window.firebaseAuth;
-
-        if (messageElement) {
-            messageElement.textContent = 'Conectando à Força...';
-            messageElement.style.color = 'orange';
-        }
-
-        await signInWithEmailAndPassword(auth, email, password);
-        
-        if (messageElement) {
-            messageElement.textContent = 'Conexão com a Força estabelecida!';
-            messageElement.style.color = 'green';
-        }
-
-        setTimeout(() => {
-            closeModal();
-            window.location.href = 'lista.html';
-        }, 1500);
-
-    } catch (error) {
-        console.error('❌ Erro no login:', error);
-        let errorMessage = 'Erro ao conectar com a Força!';
-        
-        switch (error.code) {
-            case 'auth/invalid-email': errorMessage = 'Email Jedi inválido!'; break;
-            case 'auth/user-disabled': errorMessage = 'Este usuário Jedi foi desativado!'; break;
-            case 'auth/user-not-found': errorMessage = 'Jedi não encontrado nos registros!'; break;
-            case 'auth/wrong-password': errorMessage = 'Senha secreta incorreta!'; break;
-            case 'auth/too-many-requests': errorMessage = 'Muitas tentativas. Tente novamente mais tarde!'; break;
-        }
-        
-        if (messageElement) {
-            messageElement.textContent = errorMessage;
-            messageElement.style.color = 'red';
-        }
-    }
-}
-
-async function handleRegister(event) {
-    event.preventDefault();
-    console.log('🔐 Processando registro...');
-
-    const name = document.getElementById('name')?.value;
-    const email = document.getElementById('newEmail')?.value;
-    const password = document.getElementById('newPassword')?.value;
-    const messageElement = document.getElementById('registerMessage');
-
-    if (!name || !email || !password) {
-        if (messageElement) {
-            messageElement.textContent = 'Por favor, preencha todos os campos.';
-            messageElement.style.color = 'red';
-        }
-        return;
-    }
-
-    try {
-        // Import dinâmico do Firebase v9
-        const { createUserWithEmailAndPassword, updateProfile } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js');
-        const auth = window.firebaseAuth;
-
-        if (messageElement) {
-            messageElement.textContent = 'Recrutando para a Rebelião...';
-            messageElement.style.color = 'orange';
-        }
-
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(userCredential.user, { displayName: name });
-
-        // Enviar emails de boas-vindas (não bloqueante)
-        try {
-            await Promise.allSettled([
-                resendService.sendWelcomeEmail(name, email),
-                resendService.sendNewUserNotification({ name, email })
-            ]);
-        } catch (emailError) {
-            console.log('📧 Erro no envio de emails:', emailError);
-        }
-
-        if (messageElement) {
-            messageElement.textContent = 'Rebelde recrutado com sucesso! 🚀';
-            messageElement.style.color = 'green';
-        }
-
-        setTimeout(() => showLoginForm(), 3000);
-
-    } catch (error) {
-        console.error('❌ Erro no registro:', error);
-        let errorMessage = 'Erro no recrutamento rebelde!';
-        
-        switch (error.code) {
-            case 'auth/email-already-in-use': errorMessage = 'Este email já está na Rebelião!'; break;
-            case 'auth/invalid-email': errorMessage = 'Email da Força inválido!'; break;
-            case 'auth/operation-not-allowed': errorMessage = 'Operação não permitida!'; break;
-            case 'auth/weak-password': errorMessage = 'Senha Jedi muito fraca! Use pelo menos 6 caracteres.'; break;
-        }
-        
-        if (messageElement) {
-            messageElement.textContent = errorMessage;
-            messageElement.style.color = 'red';
-        }
-    }
-}
-
-async function startRecovery() {
-    console.log('🔐 Iniciando recuperação de senha...');
-    
-    const email = document.getElementById('recoveryEmail')?.value;
-    const messageElement = document.getElementById('recoveryMessage');
-
-    if (!email) {
-        if (messageElement) {
-            messageElement.textContent = 'Por favor, informe seu email Jedi.';
-            messageElement.style.color = 'red';
-        }
-        return;
-    }
-
-    try {
-        const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js');
-        const auth = window.firebaseAuth;
-
-        if (messageElement) {
-            messageElement.textContent = 'Enviando mensagem holográfica...';
-            messageElement.style.color = 'orange';
-        }
-
-        await sendPasswordResetEmail(auth, email);
-
-        if (messageElement) {
-            messageElement.textContent = 'Mensagem holográfica enviada! Verifique seu email.';
-            messageElement.style.color = 'green';
-        }
-
-        setTimeout(() => showLoginForm(), 3000);
-
-    } catch (error) {
-        console.error('❌ Erro na recuperação:', error);
-        let errorMessage = 'Erro ao enviar mensagem holográfica!';
-        
-        switch (error.code) {
-            case 'auth/invalid-email': errorMessage = 'Email Jedi inválido!'; break;
-            case 'auth/user-not-found': errorMessage = 'Jedi não encontrado nos registros!'; break;
-        }
-        
-        if (messageElement) {
-            messageElement.textContent = errorMessage;
-            messageElement.style.color = 'red';
-        }
-    }
-}
-
-function verifyRecoveryCode() {
-    const messageElement = document.getElementById('recoveryMessage');
-    if (messageElement) {
-        messageElement.textContent = 'Funcionalidade de verificação de código em desenvolvimento.';
-        messageElement.style.color = 'orange';
-    }
-}
-
-// ==================== FUNÇÕES AUXILIARES ====================
-function createStars() {
-    console.log('✨ Criando campo de estrelas...');
-    const heroSection = document.getElementById('hero');
-    if (!heroSection) return;
-
-    const starsCount = 200;
-    for (let i = 0; i < starsCount; i++) {
-        const star = document.createElement('div');
-        star.classList.add('star');
-
-        const size = Math.random() * 3;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.animationDuration = `${2 + Math.random() * 5}s`;
-        star.style.animationDelay = `${Math.random() * 5}s`;
-
-        heroSection.appendChild(star);
-    }
-    console.log(`✅ ${starsCount} estrelas criadas!`);
-}
-
-function checkAuthState() {
-    console.log('🔍 Verificando estado de autenticação...');
-    // Será implementado quando o Firebase estiver configurado
-}
-
-function setupContactForm() {
-    console.log('📧 Configurando formulário de contato...');
-    const contactForm = document.getElementById("contact-form");
-    if (!contactForm) return;
-
-    contactForm.addEventListener("submit", async function(e) {
-        e.preventDefault();
-
-        const nome = document.getElementById("name")?.value;
-        const email = document.getElementById("email")?.value;
-        const assunto = document.getElementById("assunto")?.value;
-        const mensagem = document.getElementById("message")?.value;
-        const feedback = document.getElementById("feedback");
-
-        if (nome && email && assunto && mensagem) {
-            if (feedback) {
-                feedback.textContent = "Enviando mensagem através do hiperespaço...";
-                feedback.style.color = "orange";
-            }
-
-            try {
-                const result = await resendService.sendContactEmail({
-                    name: nome,
-                    email: email,
-                    subject: assunto,
-                    message: mensagem
-                });
-
-                if (feedback) {
-                    if (result.success) {
-                        feedback.textContent = "Mensagem enviada com sucesso! Retornaremos em breve.";
-                        feedback.style.color = "green";
-                        this.reset();
-                        setTimeout(() => { feedback.textContent = ""; }, 10000);
-                    } else {
-                        feedback.textContent = "Mensagem não enviada. Tente novamente.";
-                        feedback.style.color = "red";
-                    }
+            document.addEventListener("click", (event) => {
+                if (containerForm.classList.contains("form-active") &&
+                    !contactForm.contains(event.target) &&
+                    !openForm.contains(event.target)
+                ) {
+                    containerForm.classList.remove("form-active");
+                    openForm.style.display = "flex";
+                    document.body.style.overflowY = "scroll";
                 }
-            } catch (error) {
-                if (feedback) {
-                    feedback.textContent = "Erro ao enviar mensagem. Tente novamente.";
-                    feedback.style.color = "red";
-                }
-            }
-        } else {
-            if (feedback) {
-                feedback.textContent = "Preencha todos os campos.";
-                feedback.style.color = "red";
-            }
+            });
         }
-    });
-
-    // Configurar botões do formulário de contato
-    const openForm = document.querySelector(".open-form");
-    const closeForm = document.querySelector(".close-form");
-    const containerForm = document.querySelector(".contact-container");
-
-    if (openForm && closeForm && containerForm) {
-        openForm.addEventListener("click", () => {
-            containerForm.classList.add("form-active");
-            openForm.style.display = "none";
-        });
-
-        closeForm.addEventListener("click", () => {
-            containerForm.classList.remove("form-active");
-            openForm.style.display = "flex";
-        });
-    }
-}
-
-function setupEventListeners() {
-    console.log('🎯 Configurando event listeners...');
-    
-    // Fechar modal clicando fora
-    const modal = document.getElementById('loginModal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
     }
 
-    // Fechar com ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
-    });
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+        createStars();
+        checkAuthState();
+        setupContactForm();
 
-    console.log('✅ Event listeners configurados!');
-}
-
-function setupSmoothScroll() {
-    console.log('🔄 Configurando scroll suave...');
-    const links = document.querySelectorAll('a[href^="#"]');
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+        document.querySelectorAll('.depth-effect').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
         });
+
+        console.log('EmailJS disponível:', typeof emailjs !== 'undefined');
     });
-}
 
-// ==================== INICIALIZAÇÃO ====================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 DOM Carregado - Inicializando Star Wars To-Do List...');
-    
-    createStars();
-    setupContactForm();
-    setupEventListeners();
-    setupSmoothScroll();
-    
-    console.log('✅ Sistema inicializado com sucesso!');
-    console.log('🔍 Funções disponíveis:', {
-        openModal: typeof openModal,
-        closeModal: typeof closeModal,
-        handleLogin: typeof handleLogin,
-        handleRegister: typeof handleRegister
-    });
-});
-
-// ==================== FUNÇÕES GLOBAIS ====================
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.showLoginForm = showLoginForm;
-window.showRegisterForm = showRegisterForm;
-window.showRecoveryForm = showRecoveryForm;
-window.handleLogin = handleLogin;
-window.handleRegister = handleRegister;
-window.startRecovery = startRecovery;
-window.verifyRecoveryCode = verifyRecoveryCode;
-window.hideWelcomeScreen = function() {
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    if (welcomeScreen) welcomeScreen.classList.add('hidden');
-};
-
-// Função de teste
-window.testarEmailProducao = async function() {
-    try {
+    // Função de teste de email
+    window.testarEmail = function() {
         const testEmail = prompt('Digite um email para teste:');
         if (testEmail) {
-            const result = await resendService.sendWelcomeEmail('Usuário Teste', testEmail);
-            if (result.success) {
-                alert('✅ Email de teste enviado! Verifique sua caixa de entrada.');
-            } else {
-                alert('❌ Erro ao enviar email: ' + result.error);
-            }
+            enviarEmailBoasVindas('Usuário Teste', testEmail)
+                .then(result => {
+                    if (result && result.status === 200) alert('Email de teste enviado com sucesso!');
+                    else alert('Email de teste não enviado. Verifique o console.');
+                })
+                .catch(error => { console.error('Erro no teste:', error); alert('Erro ao enviar email de teste.'); });
         }
-    } catch (error) {
-        alert('❌ Erro inesperado: ' + error.message);
-    }
-};
+    };
 
-console.log('🎉 script.js carregado e pronto!');
+    // Exportar funções globalmente
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.showLoginForm = showLoginForm;
+    window.showRegisterForm = showRegisterForm;
+    window.showRecoveryForm = showRecoveryForm;
+    window.handleLogin = handleLogin;
+    window.handleRegister = handleRegister;
+    window.startRecovery = startRecovery;
+    window.verifyRecoveryCode = verifyRecoveryCode;
+    window.hideWelcomeScreen = hideWelcomeScreen;
+
+})();
