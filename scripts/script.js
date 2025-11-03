@@ -1,5 +1,6 @@
+// scripts/script.js
 import { db, doc, setDoc } from "./firebase.js";
-import resendService from './resend-service.js';
+import resendService from './email-resend.js';
 
 (function () {
     "use strict";
@@ -11,20 +12,20 @@ import resendService from './resend-service.js';
     // Enviar email de boas-vindas usando Resend
     async function enviarEmailBoasVindas(nome, email) {
         try {
-            console.log('Tentando enviar email de boas-vindas para:', email);
+            console.log('📧 Tentando enviar email de boas-vindas para:', email);
 
             const result = await resendService.sendWelcomeEmail(nome, email);
             
             if (result.success) {
-                console.log('Email de boas-vindas enviado com sucesso!');
+                console.log('✅ Email de boas-vindas enviado com sucesso!');
                 return result.data;
             } else {
-                console.log('Email de boas-vindas não enviado, mas registro continuou');
+                console.log('⚠️ Email de boas-vindas não enviado, mas registro continuou');
                 return null;
             }
 
         } catch (error) {
-            console.log('Erro no envio de email, mas registro continuou:', error);
+            console.log('⚠️ Erro no envio de email, mas registro continuou:', error);
             return null;
         }
     }
@@ -32,7 +33,7 @@ import resendService from './resend-service.js';
     // Enviar notificação de novo usuário
     async function enviarNotificacaoNovoUsuario(userData) {
         try {
-            console.log('Enviando notificação de novo usuário...');
+            console.log('🔔 Enviando notificação de novo usuário...');
             const result = await resendService.sendNewUserNotification(userData);
             
             if (result.success) {
@@ -81,20 +82,20 @@ import resendService from './resend-service.js';
     }
 
     function showLoginForm() {
-        document.getElementById('loginForm').classlist.remove('hidden');
-        document.getElementById('registerForm').classlist.add('hidden');
-        document.getElementById('recoveryForm').classlist.add('hidden');
-        document.getElementById('loginMessage').classlist.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('recoveryForm').classList.add('hidden');
+        document.getElementById('loginMessage').classList.add('hidden');
 
         document.getElementById('email').value = '';
         document.getElementById('password').value = '';
     }
 
     function showRegisterForm() {
-        document.getElementById('loginForm').classlist.add('hidden');
-        document.getElementById('registerForm').classlist.remove('hidden');
-        document.getElementById('recoveryForm').classlist.add('hidden');
-        document.getElementById('registerMessage').classlist.add('hidden');
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('recoveryForm').classList.add('hidden');
+        document.getElementById('registerMessage').classList.add('hidden');
 
         document.getElementById('name').value = '';
         document.getElementById('newEmail').value = '';
@@ -102,11 +103,11 @@ import resendService from './resend-service.js';
     }
 
     function showRecoveryForm() {
-        document.getElementById('loginForm').classlist.add('hidden');
-        document.getElementById('registerForm').classlist.add('hidden');
-        document.getElementById('recoveryForm').classlist.remove('hidden');
-        document.getElementById('step1').classlist.remove('hidden');
-        document.getElementById('step2').classlist.add('hidden');
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('recoveryForm').classList.remove('hidden');
+        document.getElementById('step1').classList.remove('hidden');
+        document.getElementById('step2').classList.add('hidden');
 
         const messageElement = document.getElementById('recoveryMessage');
         messageElement.textContent = '';
@@ -257,10 +258,10 @@ import resendService from './resend-service.js';
     function checkAuthState() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log('Usuário já logado, redirecionando...');
+                console.log('✅ Usuário já logado, redirecionando...');
                 window.location.href = 'lista.html';
             } else {
-                console.log('Usuário não logado, permanecendo na página inicial.');
+                console.log('ℹ️ Usuário não logado, permanecendo na página inicial.');
             }
         });
     }
@@ -297,24 +298,24 @@ import resendService from './resend-service.js';
                     });
 
                     if (result.success) {
-                        feedback.textContent = "Mensagem enviada com sucesso! Retornaremos em breve.";
+                        feedback.textContent = "✅ Mensagem enviada com sucesso! Retornaremos em breve.";
                         feedback.classList.remove('text-warning');
                         feedback.classList.add('text-highlight');
                         this.reset();
 
                         setTimeout(() => { feedback.textContent = ""; }, 10000);
                     } else {
-                        feedback.textContent = "Mensagem não enviada. Tente novamente ou entre em contato diretamente.";
+                        feedback.textContent = "⚠️ Mensagem não enviada. Tente novamente ou entre em contato diretamente.";
                         feedback.classList.remove('text-warning', 'text-highlight');
                         feedback.classList.add('text-error');
                     }
                 } catch (error) {
-                    feedback.textContent = "Erro ao enviar mensagem. Tente novamente.";
+                    feedback.textContent = "⚠️ Erro ao enviar mensagem. Tente novamente.";
                     feedback.classList.remove('text-warning', 'text-highlight');
                     feedback.classList.add('text-error');
                 }
             } else {
-                feedback.textContent = "Preencha todos os campos!";
+                feedback.textContent = "⚠️ Preencha todos os campos.";
                 feedback.classList.remove('text-highlight');
                 feedback.classList.add('text-error');
             }
@@ -362,7 +363,7 @@ import resendService from './resend-service.js';
             });
         });
 
-        console.log('Sistema inicializado - Star Wars To-Do List');
+        console.log('🚀 Sistema inicializado - Star Wars To-Do List');
     });
 
     // Função de teste para produção
@@ -372,12 +373,12 @@ import resendService from './resend-service.js';
             try {
                 const result = await resendService.sendWelcomeEmail('Usuário Teste', testEmail);
                 if (result.success) {
-                    alert('Email de teste enviado com sucesso! Verifique sua caixa de entrada.');
+                    alert('✅ Email de teste enviado com sucesso! Verifique sua caixa de entrada.');
                 } else {
-                    alert('Erro ao enviar email: ' + result.error);
+                    alert('❌ Erro ao enviar email: ' + result.error);
                 }
             } catch (error) {
-                alert('Erro inesperado: ' + error.message);
+                alert('❌ Erro inesperado: ' + error.message);
             }
         }
     };
