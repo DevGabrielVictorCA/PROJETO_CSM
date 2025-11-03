@@ -423,8 +423,6 @@
 </footer>
 
 <!-- Scripts -->
-<script type="module" src="scripts/script.js"></script>
-
 <!-- Firebase v8 (compatibilidade) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -442,11 +440,12 @@
     firebase.initializeApp(firebaseConfig);
 </script>
 
+<!-- Script principal SEM type="module" -->
+<script src="scripts/script.js"></script>
+
 <!-- Outros scripts -->
 <script src="scripts/tema.js"></script>
 <script src="scripts/audio-tema.js"></script>
-<script type="module" src="scripts/firebase.js"></script>
-<script type="module" src="scripts/auth.js"></script>
 
 </body>
 </html>
