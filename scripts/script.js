@@ -1,5 +1,5 @@
-// scripts/script.js
 import { db, doc, setDoc } from "./firebase.js";
+import resendService from './resend-service.js';
 
 (function () {
     "use strict";
@@ -8,32 +8,40 @@ import { db, doc, setDoc } from "./firebase.js";
     let recoveryCode = null;
     let recoveryEmail = null;
 
-    // Enviar email de boas-vindas
+    // Enviar email de boas-vindas usando Resend
     async function enviarEmailBoasVindas(nome, email) {
         try {
-            console.log('Tentando enviar email para:', email);
+            console.log('Tentando enviar email de boas-vindas para:', email);
 
-            const templateParams = { name: nome, email, to_email: email };
-
-            if (typeof emailjs === 'undefined') {
-                console.error('EmailJS não está carregado');
+            const result = await resendService.sendWelcomeEmail(nome, email);
+            
+            if (result.success) {
+                console.log('Email de boas-vindas enviado com sucesso!');
+                return result.data;
+            } else {
+                console.log('Email de boas-vindas não enviado, mas registro continuou');
                 return null;
             }
 
-            const response = await emailjs.send(
-                'service_up82fcd',
-                'template_jiu3n49',
-                templateParams
-            );
-
-            console.log('Email de boas-vindas enviado com sucesso!', response);
-            return response;
-
         } catch (error) {
-            console.error('Erro detalhado ao enviar email:', error);
-            console.log('Código do erro:', error.code);
-            console.log('Mensagem:', error.text);
+            console.log('Erro no envio de email, mas registro continuou:', error);
             return null;
+        }
+    }
+
+    // Enviar notificação de novo usuário
+    async function enviarNotificacaoNovoUsuario(userData) {
+        try {
+            console.log('Enviando notificação de novo usuário...');
+            const result = await resendService.sendNewUserNotification(userData);
+            
+            if (result.success) {
+                console.log('✅ Notificação de novo usuário enviada!');
+            } else {
+                console.log('⚠️ Notificação não enviada');
+            }
+        } catch (error) {
+            console.log('⚠️ Erro na notificação:', error);
         }
     }
 
@@ -73,20 +81,20 @@ import { db, doc, setDoc } from "./firebase.js";
     }
 
     function showLoginForm() {
-        document.getElementById('loginForm').classList.remove('hidden');
-        document.getElementById('registerForm').classList.add('hidden');
-        document.getElementById('recoveryForm').classList.add('hidden');
-        document.getElementById('loginMessage').classList.add('hidden');
+        document.getElementById('loginForm').classlist.remove('hidden');
+        document.getElementById('registerForm').classlist.add('hidden');
+        document.getElementById('recoveryForm').classlist.add('hidden');
+        document.getElementById('loginMessage').classlist.add('hidden');
 
         document.getElementById('email').value = '';
         document.getElementById('password').value = '';
     }
 
     function showRegisterForm() {
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('registerForm').classList.remove('hidden');
-        document.getElementById('recoveryForm').classList.add('hidden');
-        document.getElementById('registerMessage').classList.add('hidden');
+        document.getElementById('loginForm').classlist.add('hidden');
+        document.getElementById('registerForm').classlist.remove('hidden');
+        document.getElementById('recoveryForm').classlist.add('hidden');
+        document.getElementById('registerMessage').classlist.add('hidden');
 
         document.getElementById('name').value = '';
         document.getElementById('newEmail').value = '';
@@ -94,11 +102,11 @@ import { db, doc, setDoc } from "./firebase.js";
     }
 
     function showRecoveryForm() {
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('registerForm').classList.add('hidden');
-        document.getElementById('recoveryForm').classList.remove('hidden');
-        document.getElementById('step1').classList.remove('hidden');
-        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('loginForm').classlist.add('hidden');
+        document.getElementById('registerForm').classlist.add('hidden');
+        document.getElementById('recoveryForm').classlist.remove('hidden');
+        document.getElementById('step1').classlist.remove('hidden');
+        document.getElementById('step2').classlist.add('hidden');
 
         const messageElement = document.getElementById('recoveryMessage');
         messageElement.textContent = '';
@@ -173,15 +181,14 @@ import { db, doc, setDoc } from "./firebase.js";
                     dataCriacao: new Date().toISOString()
                 }, { merge: true });
 
-                return enviarEmailBoasVindas(name, email);
-            })
-            .then((emailResponse) => {
-                if (emailResponse && emailResponse.status === 200) {
-                    messageElement.textContent = 'Rebelde recrutado com sucesso! Email de boas-vindas enviado! 🚀';
-                } else {
-                    messageElement.textContent = 'Rebelde recrutado com sucesso! (Email não enviado)';
-                }
+                // Enviar email de boas-vindas e notificação (não bloqueantes)
+                const emailPromise = enviarEmailBoasVindas(name, email);
+                const notificationPromise = enviarNotificacaoNovoUsuario({ name, email });
 
+                // Aguarda ambos mas não bloqueia em caso de erro
+                await Promise.allSettled([emailPromise, notificationPromise]);
+
+                messageElement.textContent = 'Rebelde recrutado com sucesso! 🚀';
                 messageElement.classList.remove('text-warning');
                 messageElement.classList.add('text-highlight');
 
@@ -267,23 +274,47 @@ import { db, doc, setDoc } from "./firebase.js";
         const contactForm = document.getElementById("contact-form");
         if (!contactForm) return;
 
-        contactForm.addEventListener("submit", function(e) {
+        contactForm.addEventListener("submit", async function(e) {
             e.preventDefault();
 
             const nome = document.getElementById("name").value;
             const email = document.getElementById("email").value;
+            const assunto = document.getElementById("assunto").value;
             const mensagem = document.getElementById("message").value;
             const feedback = document.getElementById("feedback");
 
-            if (nome && email && mensagem) {
-                feedback.textContent = "Mensagem enviada com sucesso!";
+            if (nome && email && assunto && mensagem) {
+                feedback.textContent = "Enviando mensagem através do hiperespaço...";
                 feedback.classList.remove('text-error');
-                feedback.classList.add('text-highlight');
-                this.reset();
+                feedback.classList.add('text-warning');
 
-                setTimeout(() => { feedback.textContent = ""; }, 10000);
+                try {
+                    const result = await resendService.sendContactEmail({
+                        name: nome,
+                        email: email,
+                        subject: assunto,
+                        message: mensagem
+                    });
+
+                    if (result.success) {
+                        feedback.textContent = "Mensagem enviada com sucesso! Retornaremos em breve.";
+                        feedback.classList.remove('text-warning');
+                        feedback.classList.add('text-highlight');
+                        this.reset();
+
+                        setTimeout(() => { feedback.textContent = ""; }, 10000);
+                    } else {
+                        feedback.textContent = "Mensagem não enviada. Tente novamente ou entre em contato diretamente.";
+                        feedback.classList.remove('text-warning', 'text-highlight');
+                        feedback.classList.add('text-error');
+                    }
+                } catch (error) {
+                    feedback.textContent = "Erro ao enviar mensagem. Tente novamente.";
+                    feedback.classList.remove('text-warning', 'text-highlight');
+                    feedback.classList.add('text-error');
+                }
             } else {
-                feedback.textContent = "Preencha todos os campos.";
+                feedback.textContent = "Preencha todos os campos!";
                 feedback.classList.remove('text-highlight');
                 feedback.classList.add('text-error');
             }
@@ -331,19 +362,23 @@ import { db, doc, setDoc } from "./firebase.js";
             });
         });
 
-        console.log('EmailJS disponível:', typeof emailjs !== 'undefined');
+        console.log('Sistema inicializado - Star Wars To-Do List');
     });
 
-    // Função de teste de email
-    window.testarEmail = function() {
-        const testEmail = prompt('Digite um email para teste:');
+    // Função de teste para produção
+    window.testarEmailProducao = async function() {
+        const testEmail = prompt('Digite um email para teste em produção:');
         if (testEmail) {
-            enviarEmailBoasVindas('Usuário Teste', testEmail)
-                .then(result => {
-                    if (result && result.status === 200) alert('Email de teste enviado com sucesso!');
-                    else alert('Email de teste não enviado. Verifique o console.');
-                })
-                .catch(error => { console.error('Erro no teste:', error); alert('Erro ao enviar email de teste.'); });
+            try {
+                const result = await resendService.sendWelcomeEmail('Usuário Teste', testEmail);
+                if (result.success) {
+                    alert('Email de teste enviado com sucesso! Verifique sua caixa de entrada.');
+                } else {
+                    alert('Erro ao enviar email: ' + result.error);
+                }
+            } catch (error) {
+                alert('Erro inesperado: ' + error.message);
+            }
         }
     };
 
