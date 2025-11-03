@@ -5,7 +5,7 @@ console.log('⭐ Star Wars To-Do List - Script carregado!');
 // Serviço Resend integrado
 class ResendService {
     constructor() {
-        this.apiKey = 're_7DJicSzh_uQnXzh4radtiDTiisi7RcZPF';
+        this.apiKey = 're_AXmexEMS_GqzW3N9WXiiKa1SioRmStPb9';
         this.baseUrl = 'https://api.resend.com';
         this.isProduction = window.location.hostname === 'starwarstodolist.shop' || 
                         window.location.hostname === 'www.starwarstodolist.shop';
