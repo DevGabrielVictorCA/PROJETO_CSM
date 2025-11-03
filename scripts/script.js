@@ -1,11 +1,11 @@
-// scripts/script.js - VERSÃO COMPLETA FIREBASE v9
+// scripts/script.js - VERSÃO COMPLETA FIREBASE v9 CORRIGIDA
 
 console.log('⭐ Star Wars To-Do List - Script carregado!');
 
 // Serviço Resend integrado
 class ResendService {
     constructor() {
-        this.apiKey = 're_3uSZmLxq_4XC2uAgzhRR9CuvQ1sZQtbpe';
+        this.apiKey = 're_7DJicSzh_uQnXzh4radtiDTiisi7RcZPF';
         this.baseUrl = 'https://api.resend.com';
         this.isProduction = window.location.hostname === 'starwarstodolist.shop' || 
                         window.location.hostname === 'www.starwarstodolist.shop';
@@ -16,7 +16,8 @@ class ResendService {
         try {
             console.log('📧 Enviando email via Resend...', { to, subject });
 
-            const response = await fetch(`${this.baseUrl}/emails`, {
+            // ✅ CORREÇÃO: Endpoint correto
+            const response = await fetch(`${this.baseUrl}/emails/send`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${this.apiKey}`,
