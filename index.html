@@ -418,16 +418,17 @@
 
 <footer class="py-8 text-center border-t" style="border-top: 2px solid var(--highlighted-color);">
     <a href="politicas.html" target="_blank" class="footer-links">Políticas de Privacidade</a>
-    <p class="py-2 pt-5">Que a força (e o código) esteja com você!</p>
+    <p class="py-2 pt-5">Que a força esteja com você!</p>
     <p>2025 Star Wars To-Do List</p>
 </footer>
 
 <!-- Scripts -->
-<!-- Firebase v8 (compatibilidade) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script>
-    // Configuração do Firebase
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    
+    // Your web app's Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyAAse8fcxMntSDgI4ssrKVcuS14TIcxqYo",
         authDomain: "star-wars-list-b450b.firebaseapp.com",
@@ -436,8 +437,14 @@
         messagingSenderId: "1078874247193",
         appId: "1:1078874247193:web:5ab3e99fcf561140dcda88"
     };
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    // Disponibilizar globalmente
+    window.firebaseAuth = auth;
+    console.log('Firebase v9 inicializado!');
 </script>
 
 <!-- Script principal -->
